@@ -1,4 +1,4 @@
-package model;
+package ircapp.model;
 
 public class User {
 

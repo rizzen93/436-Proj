@@ -1,4 +1,4 @@
-package model;
+package ircapp.model;
 
 import java.util.Date;
 
