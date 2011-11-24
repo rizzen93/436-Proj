@@ -3,6 +3,20 @@
   xmlns:android="http://schemas.android.com/apk/res/android"
   android:orientation="vertical"
   android:layout_width="match_parent"
-  android:layout_height="match_parent">
+  android:layout_height="match_parent" android:weightSum="1">
+    <LinearLayout android:id="@+id/linearLayout1" android:layout_width="match_parent" android:orientation="vertical" android:layout_height="wrap_content" android:layout_weight="0.24">
+        <TextView android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/serverAddress" android:text="Server Address"></TextView>
+        <EditText android:layout_height="wrap_content" android:layout_width="match_parent" android:id="@+id/serverNameText" android:text="irc.gamesurge.net">
+            <requestFocus></requestFocus>
+        </EditText>
+        <TextView android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/serverPort" android:text="Port"></TextView>
+        <EditText android:layout_height="wrap_content" android:layout_width="match_parent" android:id="@+id/portText" android:text="6667"></EditText>
+        <TextView android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/password" android:text="Password (Optional)"></TextView>
+        <EditText android:layout_height="wrap_content" android:layout_width="match_parent" android:id="@+id/passwordText">
+        </EditText>
+        <TextView android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/nickname" android:text="Nick"></TextView>
+        <EditText android:id="@+id/editText1" android:layout_height="wrap_content" android:layout_width="match_parent" android:text="rizztest"></EditText>
+    </LinearLayout>
+    <Button android:layout_width="match_parent" android:layout_height="wrap_content" android:id="@+id/connectButton" android:text="Connect!"></Button>
     
 </LinearLayout>
