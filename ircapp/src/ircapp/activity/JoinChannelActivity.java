@@ -3,11 +3,12 @@ package ircapp.activity;
 import com.irceapp.R;
 
 import android.app.Activity;
+import android.app.ListActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 
-public class JoinChannelActivity extends Activity implements OnClickListener
+public class JoinChannelActivity extends ListActivity
 {
 
 	@Override
@@ -17,13 +18,5 @@ public class JoinChannelActivity extends Activity implements OnClickListener
 		
 		setContentView(R.layout.joinchannel);
 	}
-	
-	@Override
-	public void onClick(View v) 
-	{
-		
-	}
-	
-	
 
 }

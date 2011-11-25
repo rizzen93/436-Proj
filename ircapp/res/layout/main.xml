@@ -6,7 +6,8 @@
     android:weightSum="1">
     <RelativeLayout android:id="@+id/relativeLayout1" android:layout_height="wrap_content" android:layout_width="match_parent" android:layout_weight="1.06">
         <LinearLayout android:layout_width="wrap_content" android:id="@+id/linearLayout1" android:orientation="vertical" android:layout_height="wrap_content" android:layout_centerVertical="true" android:layout_alignParentRight="true" android:layout_marginRight="139dp"></LinearLayout>
-        <Spinner android:layout_height="wrap_content" android:layout_below="@+id/addServerButton" android:layout_centerHorizontal="true" android:layout_marginTop="33dp" android:layout_width="match_parent" android:id="@+id/serverSelectionSpinner"></Spinner>
-        <Button android:text="Add IRC Server" android:layout_width="wrap_content" android:id="@+id/addServerButton" android:layout_height="wrap_content" android:layout_alignParentTop="true" android:layout_centerHorizontal="true"></Button>
+        <Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_above="@+id/linearLayout1" android:layout_centerHorizontal="true" android:layout_marginBottom="26dp" android:id="@+id/connectToServerButton" android:text="Connect!"></Button>
+        <Spinner android:layout_width="match_parent" android:layout_height="wrap_content" android:id="@+id/serverSelectionSpinner" android:layout_above="@+id/connectToServerButton" android:layout_alignRight="@+id/connectToServerButton" android:layout_marginBottom="48dp"></Spinner>
+        <Button android:text="Add IRC Server" android:layout_width="wrap_content" android:id="@+id/addServerButton" android:layout_height="wrap_content" android:layout_alignBottom="@+id/serverSelectionSpinner" android:layout_toRightOf="@+id/serverSelectionSpinner"></Button>
     </RelativeLayout>
 </LinearLayout>

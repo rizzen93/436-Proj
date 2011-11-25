@@ -1,5 +1,6 @@
 package ircapp.model;
 
-public class Channel {
+public class Channel 
+{
 
 }
