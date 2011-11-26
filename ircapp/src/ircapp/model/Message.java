@@ -14,6 +14,8 @@ public class Message
 	private final String text;
 	private final long timestamp;
 	
+	// chat text colour?
+	
 	public Message(String sender, String text)
 	{
 		this.text = text;
@@ -35,6 +37,4 @@ public class Message
 	{
 		return this.timestamp;
 	}
-	
-	
 }
