@@ -1,8 +1,9 @@
-package ircapp.activity;
+package net.ircapp.activity;
 
-import com.irceapp.R;
+import net.ircapp.model.Server;
 
-import ircapp.model.Server;
+import net.ircapp.R;
+
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;

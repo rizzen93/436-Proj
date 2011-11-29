@@ -1,11 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-      package="com.irceapp"
+      package="net.ircapp"
       android:versionCode="1"
       android:versionName="1.0">
     <uses-sdk android:minSdkVersion="8" />
-    <application android:icon="@drawable/icon" android:label="@string/app_name">
-		<activity android:name=".ListServersActivity" android:label="@string/app_name">
+    <application 
+    	android:icon="@drawable/icon"
+    	android:label="ircapp">
+		<activity 
+			android:name=".activity.ListServersActivity" 
+			android:label="ircapp"
+			android:launchMode="standard">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

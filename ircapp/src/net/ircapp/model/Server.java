@@ -1,4 +1,4 @@
-package ircapp.model;
+package net.ircapp.model;
 
 import java.util.ArrayList;
 
@@ -22,6 +22,14 @@ public class Server
 	public Server()
 	{
 		this.channels = new ArrayList<Channel>();
+		
+		serverID = 1;
+		serverTitle = "Freenode";
+		serverHostname = "irc.freenode.net";
+		serverPort = 6667;
+		password = "";
+		autoConnect = false;
+		nickname = "rizztesting";
 	}
 	
 	/*private Socket sock;
@@ -30,6 +38,11 @@ public class Server
 	{
 		//Socket sock = new Socket(hostname, port);
 	}*/
+	
+	public void setTitle(String t)
+	{
+		this.serverTitle = t;
+	}
 	
 	// getters
 	public int getServerID()

@@ -1,4 +1,4 @@
-package ircapp.model;
+package net.ircapp.model;
 
 /**
  * a channel can be for server messages, private messages, or an actual channel

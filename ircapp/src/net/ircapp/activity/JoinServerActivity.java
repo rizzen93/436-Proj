@@ -1,6 +1,6 @@
-package ircapp.activity;
+package net.ircapp.activity;
 
-import com.irceapp.R;
+import net.ircapp.R;
 
 import android.app.Activity;
 import android.app.ListActivity;

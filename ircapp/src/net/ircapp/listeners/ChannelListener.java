@@ -1,4 +1,4 @@
-package ircapp.listeners;
+package net.ircapp.listeners;
 
 public class ChannelListener {
 

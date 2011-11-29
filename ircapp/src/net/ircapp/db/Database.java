@@ -1,4 +1,9 @@
-package ircapp.db;
+package net.ircapp.db;
+
+
+import java.util.ArrayList;
+
+import net.ircapp.model.Server;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -89,6 +94,12 @@ public class Database extends SQLiteOpenHelper
 	public void updateChannel()
 	{
 		
+	}
+
+	public ArrayList<Server> getServerList() 
+	{
+	
+		return null;
 	}
 	
 }

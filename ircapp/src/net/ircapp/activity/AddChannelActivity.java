@@ -1,4 +1,4 @@
-package ircapp.activity;
+package net.ircapp.activity;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -7,7 +7,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.irceapp.R;
+import net.ircapp.R;
 
 public class AddChannelActivity extends Activity implements OnClickListener
 {

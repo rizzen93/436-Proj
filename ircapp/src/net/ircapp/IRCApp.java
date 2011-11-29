@@ -1,8 +1,12 @@
-package ircapp;
+package net.ircapp;
 
-import ircapp.model.Server;
 
 import java.util.ArrayList;
+
+import net.ircapp.db.Database;
+import net.ircapp.model.Server;
+
+import android.content.Context;
 
 public class IRCApp 
 {
@@ -14,6 +18,13 @@ public class IRCApp
 	public IRCApp()
 	{
 		this.servers = new ArrayList<Server>();
+	}
+	
+	public void loadServersFromDB(Context context)
+	{
+		Database db = new Database(context);
+		this.servers = db.getServerList();
+		db.close();
 	}
 	
 	/**

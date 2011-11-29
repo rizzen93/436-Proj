@@ -1,4 +1,4 @@
-package ircapp.activity;
+package net.ircapp.activity;
 
 import android.app.ListActivity;
 import android.os.Bundle;
@@ -6,7 +6,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
 
-import com.irceapp.R;
+import net.ircapp.R;
 
 public class ListChannelsActivity extends ListActivity implements OnItemLongClickListener
 {
