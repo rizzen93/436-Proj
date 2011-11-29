@@ -1,5 +1,7 @@
 package ircapp.activity;
 
+import com.irceapp.R;
+
 import android.app.ListActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -12,6 +14,7 @@ public class ListServersActivity extends ListActivity implements OnItemLongClick
 	public void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
+		//setContentView(R.layout.serverlist);
 	}
 	
 	@Override
