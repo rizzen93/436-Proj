@@ -10,7 +10,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 
-public class AddServerActivity extends Activity implements OnClickListener
+public class AddServerActivity extends Activity // implements OnClickListener
 {
 
 	private Server server;
@@ -35,10 +35,4 @@ public class AddServerActivity extends Activity implements OnClickListener
 		this.addServerButton = (Button) findViewById(R.id.addServerButton);
 	}
 	
-	@Override
-	public void onClick(View arg0) 
-	{
-		
-	}
-
 }
