@@ -1,11 +1,9 @@
 package net.ircapp.db;
 
-
-import java.util.ArrayList;
-
-import net.ircapp.model.Server;
-
+import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
@@ -29,15 +27,24 @@ public class Database extends SQLiteOpenHelper
 	private static final String SERVERS_NICK = "nickname"; // rizzen
 	private static final String SERVERS_AUTOCONNECT = "autoconnect"; // yes? no?
 	
-	
 	// channellist attribute names
 	private static final String CHANNELS_SERVER = "servertitle"; // means this channel belongs to whatever server was designated as being 'Freenode'
 	private static final String CHANNELS_NAME = "channelname"; // #android
 	private static final String CHANNELS_PASSWORD = "password"; 
+	
+	// keys
+	public static final String KEY_ID = "_id";
+	
+    //private DatabaseHelper mDbHelper;
+    private SQLiteDatabase db;
+    private Context context;
+
+	
 			
 	public Database(Context context)
 	{
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
+		this.context = context;
 	}
 
 	/**
@@ -68,6 +75,17 @@ public class Database extends SQLiteOpenHelper
         // nickname table?
         
 	}
+	
+	public Database open() throws SQLException
+	{
+		this.db = this.getWritableDatabase();
+		return this;
+	}
+	
+	public void close()
+	{
+		this.close();
+	}
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) 
@@ -76,9 +94,17 @@ public class Database extends SQLiteOpenHelper
 		// nothing here yet...
 	}
 	
-	public void addServer()
+	public long addServer(String title, String hostname, int port, String password, String nickname, boolean autoConnect)
 	{
+		ContentValues values = new ContentValues();
+		values.put(SERVERS_TITLE, title);
+		values.put(SERVERS_ADDRESS, hostname);
+		values.put(SERVERS_PORT, port);
+		values.put(SERVERS_PASSWORD, password);
+		values.put(SERVERS_NICK, nickname);
+		values.put(SERVERS_AUTOCONNECT, autoConnect);
 		
+		return this.db.insert(SERVERLIST_TABLE, null, values);
 	}
 	
 	public void updateServer()
@@ -96,10 +122,11 @@ public class Database extends SQLiteOpenHelper
 		
 	}
 
-	public ArrayList<Server> getServerList() 
+	public Cursor getServerList() 
 	{
-	
-		return null;
+		return this.db.query(SERVERLIST_TABLE, new String[] {KEY_ID, SERVERS_TITLE, SERVERS_ADDRESS, SERVERS_PORT, SERVERS_PASSWORD, SERVERS_NICK, SERVERS_AUTOCONNECT}, 
+				null, null, null, null, null);
+		
 	}
 	
 }

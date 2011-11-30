@@ -5,8 +5,8 @@ import java.util.ArrayList;
 
 import net.ircapp.db.Database;
 import net.ircapp.model.Server;
-
 import android.content.Context;
+import android.database.Cursor;
 
 public class IRCApp 
 {
@@ -14,6 +14,7 @@ public class IRCApp
 	public static IRCApp instance;
 	
 	private ArrayList<Server> servers;
+	private Cursor serversCursor;
 	
 	public IRCApp()
 	{
@@ -23,7 +24,8 @@ public class IRCApp
 	public void loadServersFromDB(Context context)
 	{
 		Database db = new Database(context);
-		this.servers = db.getServerList();
+		this.serversCursor = db.getServerList();
+		
 		db.close();
 	}
 	

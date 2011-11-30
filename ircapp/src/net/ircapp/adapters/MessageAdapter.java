@@ -1,4 +1,4 @@
-package net.ircapp.listadapters;
+package net.ircapp.adapters;
 
 import android.view.View;
 import android.view.ViewGroup;

@@ -14,6 +14,7 @@ public class Server
 	private boolean autoConnect;
 	private String nickname;
 	
+	private boolean isConnected;
 	// channel stuffs
 	private ArrayList<Channel> channels;
 	
@@ -30,6 +31,7 @@ public class Server
 		password = "";
 		autoConnect = false;
 		nickname = "rizztesting";
+		isConnected = false;
 	}
 	
 	/*private Socket sock;
