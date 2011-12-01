@@ -13,4 +13,6 @@
     <string name="listservers">Server listings</string>
     <string name="listchannels">Channel listings</string>
     <string name="chatlabel">Chat</string>
+    <string name="addserver_menu">Add Server</string>
+    <string name="exit_menu">Exit</string>
 </resources>

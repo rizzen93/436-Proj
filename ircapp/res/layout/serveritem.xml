@@ -6,7 +6,6 @@
   android:layout_height="match_parent" android:weightSum="1">
     <RelativeLayout android:id="@+id/relativeLayout1" android:layout_width="match_parent" android:layout_height="wrap_content">
         <TextView android:layout_height="wrap_content" android:layout_width="wrap_content" android:textAppearance="?android:attr/textAppearanceMedium" android:layout_alignParentTop="true" android:layout_alignParentLeft="true" android:id="@+id/serverTitleTextView" android:text="@string/server_title"></TextView>
-        <CheckBox android:layout_height="wrap_content" android:layout_width="wrap_content" android:layout_alignParentTop="true" android:layout_alignParentRight="true" android:text="@string/nothing" android:id="@+id/connectedCheckBox"></CheckBox>
         <TextView android:layout_height="wrap_content" android:layout_width="wrap_content" android:layout_below="@+id/serverTitleTextView" android:layout_alignParentLeft="true" android:id="@+id/serverHostnameTextView" android:text="@string/server_hostname"></TextView>
     </RelativeLayout>
     

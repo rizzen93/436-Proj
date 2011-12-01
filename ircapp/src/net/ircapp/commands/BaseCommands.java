@@ -9,5 +9,5 @@ public class BaseCommands
 	public static final String send_message = "PRIVMSG ";
 	public static final String server_pong = "PONG ";
 	public static final String server_ping = "PING ";
-	
+	public static final String server_quit = "QUIT ";
 }

@@ -7,8 +7,9 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
+import android.util.Log;
 
-public class Database extends SQLiteOpenHelper 
+public class Database  
 {
 
 	// db stuff
@@ -38,60 +39,25 @@ public class Database extends SQLiteOpenHelper
     //private DatabaseHelper mDbHelper;
     private SQLiteDatabase db;
     private Context context;
-
-	
 			
 	public Database(Context context)
 	{
-		super(context, DATABASE_NAME, null, DATABASE_VERSION);
 		this.context = context;
 	}
 
-	/**
-	 * create tables
-	 */
-	@Override
-	public void onCreate(SQLiteDatabase db)
-	{
-		// create serverlist table
-		db.execSQL("CREATE TABLE " + this.SERVERLIST_TABLE + " ( "
-				+ (String) BaseColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-				+ this.SERVERS_TITLE + " TEXT NOT NULL, "
-				+ this.SERVERS_ADDRESS + " TEXT NOT NULL, "
-				+ this.SERVERS_PORT + " INTEGER, "
-				+ this.SERVERS_PASSWORD + " TEXT, "
-				+ this.SERVERS_NICK + " TEXT NOT NULL, "
-				+ this.SERVERS_AUTOCONNECT + " BOOLEAN );"
-				);
-		
-		// create channellist table
-        db.execSQL("CREATE TABLE " + this.CHANNELLIST_TABLE + " ( "
-        		+ (String) BaseColumns._ID + "INTEGER PRIMARY KEY AUTOINCREMENT, "
-        		+ this.CHANNELS_NAME + " TEXT NOT NULL, "
-        		+ this.CHANNELS_PASSWORD + " TEXT, " 
-        		+ this.CHANNELS_SERVER + " INTEGER );"
-        		);
 	
-        // nickname table?
-        
-	}
 	
 	public Database open() throws SQLException
 	{
-		this.db = this.getWritableDatabase();
+		DatabaseHelper dbHelper = new DatabaseHelper(this.context);
+		this.db = dbHelper.getWritableDatabase();
+		
 		return this;
 	}
 	
 	public void close()
 	{
 		this.close();
-	}
-
-	@Override
-	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) 
-	{
-		// TODO Auto-generated method stub
-		// nothing here yet...
 	}
 	
 	public long addServer(String title, String hostname, int port, String password, String nickname, boolean autoConnect)
@@ -126,7 +92,50 @@ public class Database extends SQLiteOpenHelper
 	{
 		return this.db.query(SERVERLIST_TABLE, new String[] {KEY_ID, SERVERS_TITLE, SERVERS_ADDRESS, SERVERS_PORT, SERVERS_PASSWORD, SERVERS_NICK, SERVERS_AUTOCONNECT}, 
 				null, null, null, null, null);
-		
 	}
 	
+	private static class DatabaseHelper extends SQLiteOpenHelper 
+	{
+		DatabaseHelper(Context context) 
+	    {
+			super(context, DATABASE_NAME, null, DATABASE_VERSION);
+	    }
+
+	    /**
+	     * create tables
+	     */
+		@Override
+		public void onCreate(SQLiteDatabase db)
+		{
+			System.out.println("creating serverlist table");
+			// create serverlist table
+			db.execSQL("CREATE TABLE " + SERVERLIST_TABLE + " ( "
+					+ (String) BaseColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+					+ SERVERS_TITLE + " TEXT NOT NULL, "
+					+ SERVERS_ADDRESS + " TEXT NOT NULL, "
+					+ SERVERS_PORT + " INTEGER, "
+					+ SERVERS_PASSWORD + " TEXT, "
+					+ SERVERS_NICK + " TEXT NOT NULL, "
+					+ SERVERS_AUTOCONNECT + " BOOLEAN );"
+					);
+	    		
+			System.out.println("creating channelist table");
+			// create channellist table
+			db.execSQL("CREATE TABLE " + CHANNELLIST_TABLE + " ( "
+					+ (String) BaseColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+					+ CHANNELS_NAME + " TEXT NOT NULL, "
+					+ CHANNELS_PASSWORD + " TEXT, " 
+					+ CHANNELS_SERVER + " INTEGER );"
+					);
+			// nickname table?
+	            
+		}
+	    	
+		@Override
+		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) 
+		{	
+
+		}
+	}
+
 }

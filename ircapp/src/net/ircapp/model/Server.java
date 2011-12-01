@@ -1,12 +1,21 @@
 package net.ircapp.model;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.net.Socket;
 import java.util.ArrayList;
+
+import net.ircapp.commands.BaseCommands;
+import net.ircapp.threads.InputThread;
 
 public class Server 
 {
 
 	// server attributes
-	private int serverID;
+	private long serverID;
 	private String serverTitle;
 	private String serverHostname;
 	private int serverPort;
@@ -14,40 +23,135 @@ public class Server
 	private boolean autoConnect;
 	private String nickname;
 	
+	private int status;
 	private boolean isConnected;
-	// channel stuffs
+	
+	// channel stuffs?
 	private ArrayList<Channel> channels;
+	
+	// connection stuffs
+	private Socket socket;
+	private BufferedReader breader;
+	private BufferedWriter bwriter;
+	private String end = "\n\r";
 	
 	// autojoin + connect commands?
 	
-	public Server()
+	/**
+	 * Server Constructor
+	 * @param id Server ID
+	 * @param title Title of the server object
+	 * @param hostname Hostname for the server.
+	 * @param port Port to connect the server on (6666-8)
+	 * @param password password for when connecting?
+	 * @param nick default nickname for the server
+	 */
+	public Server(long id, String title, String hostname, int port, String password, String nick)
 	{
 		this.channels = new ArrayList<Channel>();
 		
-		serverID = 1;
-		serverTitle = "Freenode";
-		serverHostname = "irc.freenode.net";
-		serverPort = 6667;
-		password = "";
+		this.serverID = id;
+		this.serverTitle = title;
+		this.serverHostname = hostname;
+		this.serverPort = port;
+		this.password = password;
 		autoConnect = false;
-		nickname = "rizztesting";
-		isConnected = false;
+		this.nickname = nick;
+		status = 0;
+		this.isConnected = false;
+		
+		//new InputThread();
+		//new OutputThread() do i really need these?
 	}
 	
-	/*private Socket sock;
-	
-	public Server(String hostname, int port)
+	/**
+	 * Connect to the server.
+	 * @return
+	 * @throws IOException
+	 */
+	public boolean connect() throws IOException
 	{
-		//Socket sock = new Socket(hostname, port);
-	}*/
+		this.socket = new Socket(this.serverHostname, this.serverPort);
+		
+		InputStreamReader in = new InputStreamReader(this.socket.getInputStream());
+		OutputStreamWriter out = new OutputStreamWriter(this.socket.getOutputStream());
+		
+		this.breader = new BufferedReader(in);
+		this.bwriter = new BufferedWriter(out);
+		
+		// NICK <username>\n\r
+		this.bwriter.write(BaseCommands.server_nick + this.nickname + this.end);
+		
+		// USER <username> <hostname> <servername> :<realname>\n\r
+		this.bwriter.write(BaseCommands.server_user + this.nickname + " 8 * :" + this.nickname + this.end);
+		this.bwriter.flush();
+		
+		// find out if we're connected!
+		String line = null;
+		while((line = breader.readLine()) != null)
+		{
+			System.out.println(line);
+			if(line.indexOf("004") >= 0)
+			{
+				// means we're 'logged in' and connected to the server
+				this.isConnected = true;
+				break;
+			}
+			
+			if(line.startsWith(BaseCommands.server_ping))
+			{
+				// reply PONG
+				bwriter.write(BaseCommands.server_pong + line.substring(5));
+				bwriter.flush();
+				
+				/*
+				 * for servers that require you to pong back before accepting any more input
+				 */
+				
+				// NICK <username>\n\r
+				this.bwriter.write(BaseCommands.server_nick + this.nickname + this.end);
+				
+				// USER <username> <hostname> <servername> :<realname>\n\r
+				this.bwriter.write(BaseCommands.server_user + this.nickname + " 8 * :" + this.nickname + this.end);
+				this.bwriter.flush();
+			}
+			
+			// checks here for nick in use, etc
+			// return false
+		}
+		
+		return true;
+	}
+	
+	public void disconnect() throws IOException
+	{
+		if(isConnected)
+		{
+			System.out.println("removing connection to: " + this.socket);
+			this.bwriter.write(BaseCommands.server_quit);
+			this.bwriter.close();
+			this.breader.close();
+			this.socket.close();
+		}
+	}
+	
+	public void joinChannel()
+	{
+		
+	}
+	
+	// part channel
+	public void leaveChannel()
+	{
+		
+	}
 	
 	public void setTitle(String t)
 	{
 		this.serverTitle = t;
 	}
 	
-	// getters
-	public int getServerID()
+	public long getServerID()
 	{
 		return this.serverID;
 	}
@@ -86,7 +190,4 @@ public class Server
 	{
 		this.nickname = newNick;
 	}
-	
-	
-	
 }

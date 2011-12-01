@@ -29,6 +29,16 @@ public class IRCApp
 		db.close();
 	}
 	
+	public static IRCApp getInstance()
+	{
+		if(instance == null)
+		{
+			instance = new IRCApp();
+		}
+		
+		return instance;
+	}
+	
 	/**
 	 * Add server to list.
 	 * @param s
@@ -53,6 +63,7 @@ public class IRCApp
 	 */
 	public ArrayList<Server> getServerList()
 	{
+		System.out.println("getting the server list: " + servers.size());
 		return this.servers;
 	}
 }
