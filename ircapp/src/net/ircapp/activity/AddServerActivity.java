@@ -29,11 +29,11 @@ public class AddServerActivity extends Activity // implements OnClickListener
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.addserver);
 		
-		this.serverAddress = (EditText) findViewById(R.id.serverAddressEditText);
-		this.serverPort = (EditText) findViewById(R.id.portEditText);
-		this.serverPassword = (EditText) findViewById(R.id.passwordEditText);
-		this.nick = (EditText) findViewById(R.id.nickEditText);
-		this.addServerButton = (Button) findViewById(R.id.addServerButton);
+		this.serverAddress = (EditText) findViewById(R.id.serverAddressEditText_addserver);
+		this.serverPort = (EditText) findViewById(R.id.serverPortEditText_addserver);
+		this.serverPassword = (EditText) findViewById(R.id.serverPasswordEditText_addserver);
+		this.nick = (EditText) findViewById(R.id.serverNicknameEditText_addserver);
+		this.addServerButton = (Button) findViewById(R.id.addServerButton_addserver);
 	}
 	
 }

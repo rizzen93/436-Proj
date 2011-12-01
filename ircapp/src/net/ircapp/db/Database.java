@@ -17,21 +17,21 @@ public class Database
 	private static final int DATABASE_VERSION = 1;
 	
 	// table names
-	private static final String SERVERLIST_TABLE  = "serverlist";
-	private static final String CHANNELLIST_TABLE = "channellist";
+	public static final String SERVERLIST_TABLE  = "serverlist";
+	public static final String CHANNELLIST_TABLE = "channellist";
 	
 	// serverlist attribute names // example
-	private static final String SERVERS_TITLE = "title"; // Freenode
-	private static final String SERVERS_ADDRESS = "hostname"; // irc.freenode.net
-	private static final String SERVERS_PORT = "port"; // 6667
-	private static final String SERVERS_PASSWORD = "password"; // optional, usually blank
-	private static final String SERVERS_NICK = "nickname"; // rizzen
-	private static final String SERVERS_AUTOCONNECT = "autoconnect"; // yes? no?
+	public static final String SERVERS_TITLE = "title"; // Freenode
+	public static final String SERVERS_ADDRESS = "hostname"; // irc.freenode.net
+	public static final String SERVERS_PORT = "port"; // 6667
+	public static final String SERVERS_PASSWORD = "password"; // optional, usually blank
+	public static final String SERVERS_NICK = "nickname"; // rizzen
+	public static final String SERVERS_AUTOCONNECT = "autoconnect"; // yes? no?
 	
 	// channellist attribute names
-	private static final String CHANNELS_SERVER = "servertitle"; // means this channel belongs to whatever server was designated as being 'Freenode'
-	private static final String CHANNELS_NAME = "channelname"; // #android
-	private static final String CHANNELS_PASSWORD = "password"; 
+	public static final String CHANNELS_SERVER = "servertitle"; // means this channel belongs to whatever server was designated as being 'Freenode'
+	public static final String CHANNELS_NAME = "channelname"; // #android
+	public static final String CHANNELS_PASSWORD = "password"; 
 	
 	// keys
 	public static final String KEY_ID = "_id";
@@ -71,6 +71,19 @@ public class Database
 		values.put(SERVERS_AUTOCONNECT, autoConnect);
 		
 		return this.db.insert(SERVERLIST_TABLE, null, values);
+	}
+	
+	public Cursor getServer(String servertitle)
+	{
+		Cursor cursor = db.query(SERVERLIST_TABLE, new String[] {SERVERS_TITLE, SERVERS_ADDRESS, SERVERS_PORT, SERVERS_PASSWORD, SERVERS_NICK}, 
+				SERVERS_TITLE + "=" + servertitle, null, null, null, null);
+		
+		return cursor;
+	}
+	
+	public Cursor getChannel()
+	{
+		return null;
 	}
 	
 	public void updateServer()

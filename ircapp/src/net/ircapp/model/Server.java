@@ -46,11 +46,11 @@ public class Server
 	 * @param password password for when connecting?
 	 * @param nick default nickname for the server
 	 */
-	public Server(long id, String title, String hostname, int port, String password, String nick)
+	public Server(String title, String hostname, int port, String password, String nick)
 	{
 		this.channels = new ArrayList<Channel>();
 		
-		this.serverID = id;
+		//this.serverID = id;
 		this.serverTitle = title;
 		this.serverHostname = hostname;
 		this.serverPort = port;
@@ -135,13 +135,14 @@ public class Server
 		}
 	}
 	
-	public void joinChannel()
+	public void joinChannel(String channel) throws IOException
 	{
-		
+		this.bwriter.write("JOIN #" + channel + this.end);
+		this.bwriter.flush();
 	}
 	
 	// part channel
-	public void leaveChannel()
+	public void leaveChannel() throws IOException
 	{
 		
 	}
@@ -189,5 +190,11 @@ public class Server
 	public void setNickname(String newNick)
 	{
 		this.nickname = newNick;
+	}
+	
+	public String toString()
+	{
+		return "[ server title - " + this.serverTitle + " ] --- [ server host - " + this.serverHostname + " ] --- [ server port - " + this.serverPort +
+				" ] --- [ server pass - " + this.password + " ] --- [ nickname - " + this.nickname + " ]";
 	}
 }

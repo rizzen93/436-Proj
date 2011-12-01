@@ -28,18 +28,15 @@ public class ListServersActivity extends ListActivity implements OnItemLongClick
 {
 	
 	private ServerListAdapter serverListAdapter;
-	private ArrayList<Server> servers;
-	private ListView listview;
 	private Database db;
+	private ListView listview;
 	
 	/**
 	 * called when the activity is first created
 	 */
 	@Override
 	public void onCreate(Bundle savedInstanceState)
-	{
-		this.servers = new ArrayList<Server>();
-		
+	{		
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.serverlist);
 
@@ -52,7 +49,14 @@ public class ListServersActivity extends ListActivity implements OnItemLongClick
 		Cursor listCursor = db.getServerList();
 		startManagingCursor(listCursor);
 		
-		setListAdapter(new ServerListAdapter(this, listCursor));
+		serverListAdapter = new ServerListAdapter(this, listCursor);
+		setListAdapter(serverListAdapter);
+		
+		System.out.println("getting list view");
+		this.listview = getListView();
+		
+		System.out.println("setting up onitemclick");
+		this.listview.setOnItemLongClickListener(this);
 		
 		/*this.servers = IRCApp.getInstance().getServerList();
 		System.out.println("got the serverlist from IRCApp.getInstance().getServerList()");
@@ -82,14 +86,17 @@ public class ListServersActivity extends ListActivity implements OnItemLongClick
 	{
 		System.out.println("set onclick stuff");
 		// get the server object
-		/*final Server server = serverListAdapter.getItem(position);
+		
+		System.out.println("grabbing cursor");
+		final Cursor cursor = (Cursor) serverListAdapter.getItem(position);
+		final long servid = id;
 		
 		// list of context options we have
         CharSequence[] submenu = {"Connect", "Disconnect", "Edit", "Delete"};
 		
         // create the alert dialog
         AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this);
-        alertBuilder.setTitle(server.getServerTitle());
+        alertBuilder.setTitle(cursor.getString(cursor.getColumnIndex(Database.SERVERS_TITLE)));
         alertBuilder.setItems(submenu, new OnClickListener() 
         {
         	@Override
@@ -99,11 +106,43 @@ public class ListServersActivity extends ListActivity implements OnItemLongClick
         		{
         		case 0:
         			// connect to server
+        			System.out.println("chose to connect to server");
+        			
+        			//Cursor c = db.getServer(servid);  			
+      
+        			// get the server attributes from database
+        			String title = cursor.getString(cursor.getColumnIndex(Database.SERVERS_TITLE));
+        			String hostname = cursor.getString(cursor.getColumnIndex(Database.SERVERS_ADDRESS));
+        			String port = cursor.getString(cursor.getColumnIndex(Database.SERVERS_PORT)); 
+        			String password = cursor.getString(cursor.getColumnIndex(Database.SERVERS_PASSWORD));
+        			String nickname = cursor.getString(cursor.getColumnIndex(Database.SERVERS_NICK));
+        			
+        			// make new object
+        			Server newServer = new Server(title, hostname, Integer.parseInt(port), password, nickname);
+        			IRCApp.getInstance().addServer(newServer);
+        			
+        			System.out.println(newServer.toString());
+        			try 
+        			{
+        				// connect to the irc server
+						newServer.connect();
+						newServer.joinChannel("phx");
+					} 
+        			catch (IOException e) 
+        			{
+						
+						e.printStackTrace();
+					}
+        			
         			break;
         		case 1:
         			try
                 	{
-                		server.disconnect();
+        				if(IRCApp.getInstance().getNumConnectedServers() > 0)
+        				{
+        					IRCApp.getInstance().getServer(cursor).disconnect();
+        				}
+        				//server.disconnect();
                 	}
                 	catch (IOException e)
                 	{
@@ -123,7 +162,7 @@ public class ListServersActivity extends ListActivity implements OnItemLongClick
         // create & show
         AlertDialog a = alertBuilder.create();
         a.show();
-        */
+        
 		return true;
 	}
 	
@@ -155,12 +194,15 @@ public class ListServersActivity extends ListActivity implements OnItemLongClick
                 break;
             case R.id.exit:
             	// exiting the app
-                ArrayList<Server> allServers = IRCApp.getInstance().getServerList();
+            	
+            	// get all the servers we're connected to
+                ArrayList<Server> allServers = IRCApp.getInstance().getConnectedServersList();
                 
                 for(Server s : allServers)
                 {
                 	try
                 	{
+                		// and disconnect
                 		s.disconnect();
                 		
                 	}

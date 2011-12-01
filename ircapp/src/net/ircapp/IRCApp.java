@@ -21,13 +21,12 @@ public class IRCApp
 		this.servers = new ArrayList<Server>();
 	}
 	
-	public void loadServersFromDB(Context context)
+	/*public void loadServersFromDB(Context context)
 	{
 		Database db = new Database(context);
 		this.serversCursor = db.getServerList();
-		
 		db.close();
-	}
+	}*/
 	
 	public static IRCApp getInstance()
 	{
@@ -37,6 +36,19 @@ public class IRCApp
 		}
 		
 		return instance;
+	}
+	
+	public Server getServer(Cursor c)
+	{
+		for(Server s : this.servers)
+		{
+			if(s.getServerTitle().equals(c.getString(c.getColumnIndex(Database.SERVERS_TITLE))))
+			{
+				return s;
+			}
+		}
+		
+		return null;
 	}
 	
 	/**
@@ -61,9 +73,13 @@ public class IRCApp
 	 * Get the list of servers.
 	 * @return
 	 */
-	public ArrayList<Server> getServerList()
-	{
-		System.out.println("getting the server list: " + servers.size());
+	public ArrayList<Server> getConnectedServersList()
+	{	
 		return this.servers;
+	}
+	
+	public int getNumConnectedServers()
+	{
+		return this.servers.size();
 	}
 }
