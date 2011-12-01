@@ -15,4 +15,7 @@
     <string name="chatlabel">Chat</string>
     <string name="addserver_menu">Add Server</string>
     <string name="exit_menu">Exit</string>
+    <string name="server_disconnected">Disconnected</string>
+    <string name="server_connected">Connected</string>
+    <string name="channel_name">#help</string>
 </resources>

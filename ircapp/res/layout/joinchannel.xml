@@ -5,13 +5,13 @@
   android:layout_width="match_parent"
   android:layout_height="match_parent" android:weightSum="1">
     <RelativeLayout android:id="@+id/relativeLayout1" android:layout_height="295dp" android:layout_weight="0.53" android:layout_width="match_parent">
-        <EditText android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_alignBaseline="@+id/channelName" android:layout_alignBottom="@+id/channelName" android:layout_alignParentRight="true" android:layout_marginRight="16dp" android:layout_alignLeft="@+id/joinChannelButton" android:id="@+id/nameText">
+        <EditText android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_alignBaseline="@+id/channelName" android:layout_alignBottom="@+id/channelName" android:layout_alignParentRight="true" android:layout_marginRight="16dp" android:layout_alignLeft="@+id/joinchannel_joinButton" android:id="@+id/joinchannel_channelName">
             <requestFocus></requestFocus>
         </EditText>
-        <EditText android:inputType="textPassword" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_alignBaseline="@+id/channelPassword" android:layout_alignBottom="@+id/channelPassword" android:layout_alignLeft="@+id/joinChannelButton" android:layout_alignRight="@+id/nameText" android:id="@+id/passwordText"></EditText>
         <TextView android:text="Channel Name" android:id="@+id/channelName" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_alignParentTop="true" android:layout_toLeftOf="@+id/nameText" android:layout_marginRight="17dp" android:layout_marginTop="26dp"></TextView>
-        <TextView android:text="Password" android:id="@+id/channelPassword" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_below="@+id/nameText" android:layout_alignLeft="@+id/channelName" android:layout_marginLeft="15dp" android:layout_marginTop="58dp"></TextView>
-        <Button android:layout_width="wrap_content" android:id="@+id/joinChannelButton" android:layout_height="wrap_content" android:layout_centerVertical="true" android:layout_centerHorizontal="true" android:text="Join Channel"></Button>
+        <Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_centerVertical="true" android:layout_centerHorizontal="true" android:text="Join Channel" android:id="@+id/joinchannel_joinButton"></Button>
+        <EditText android:layout_height="wrap_content" android:id="@+id/joinchannel_channelPassword" android:layout_width="wrap_content" android:inputType="textPassword" android:layout_alignBaseline="@+id/channelPassword" android:layout_alignBottom="@+id/channelPassword" android:layout_toRightOf="@+id/channelName" android:layout_alignRight="@+id/joinchannel_channelName"></EditText>
+        <TextView android:layout_height="wrap_content" android:text="Password" android:layout_width="wrap_content" android:id="@+id/channelPassword" android:layout_above="@+id/joinchannel_joinButton" android:layout_alignRight="@+id/channelName" android:layout_marginBottom="41dp"></TextView>
     </RelativeLayout>
     
 </LinearLayout>

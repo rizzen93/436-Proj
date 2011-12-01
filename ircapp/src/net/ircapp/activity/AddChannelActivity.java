@@ -21,9 +21,9 @@ public class AddChannelActivity extends Activity implements OnClickListener
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.joinchannel);
 		
-		this.joinButton = (Button) findViewById(R.id.joinChannelButton);
-		this.channelName = (EditText) findViewById(R.id.nameText);
-		this.channelPassword = (EditText) findViewById(R.id.passwordText);
+		this.joinButton = (Button) findViewById(R.id.joinchannel_joinButton);
+		this.channelName = (EditText) findViewById(R.id.joinchannel_channelName);
+		this.channelPassword = (EditText) findViewById(R.id.joinchannel_channelPassword);
 	}
 	
 	public void onClick(View arg0)
