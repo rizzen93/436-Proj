@@ -6,4 +6,11 @@
     <string name="nothing"></string>
     <string name="server_hostname">Server Hostname</string>
     <string name="server_title">Server Title</string>
+    <string name="addchannel">Add Channel to List</string>
+    <string name="addserver">Add Server to List</string>
+    <string name="joinchannel">Join Channel</string>
+    <string name="joinserver">Join Server</string>
+    <string name="listservers">Server listings</string>
+    <string name="listchannels">Channel listings</string>
+    <string name="chatlabel">Chat</string>
 </resources>
