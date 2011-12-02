@@ -21,7 +21,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 public class ListServersActivity extends ListActivity implements OnItemLongClickListener
@@ -42,8 +41,6 @@ public class ListServersActivity extends ListActivity implements OnItemLongClick
 
 		db = new Database(this);
 		db.open();
-
-		//db.addServer("ReplayIRC", "irc.replayirc.com", 6667, "", "androidtest", false);
 
 		Cursor listCursor = db.getServerList();
 		startManagingCursor(listCursor);
@@ -117,7 +114,9 @@ public class ListServersActivity extends ListActivity implements OnItemLongClick
                 	{
         				if(IRCApp.getInstance().getNumServers() > 0)
         				{
-        					IRCApp.getInstance().getServer(cursor).disconnect();
+        					if(IRCApp.getInstance().getServer(cursor).isConnected())
+        						IRCApp.getInstance().getServer(cursor).disconnect();
+        						
         				}
         				//server.disconnect();
                 	}
