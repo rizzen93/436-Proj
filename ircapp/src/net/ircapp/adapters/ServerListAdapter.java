@@ -40,9 +40,4 @@ public class ServerListAdapter extends ResourceCursorAdapter
 		
 		// deal with connectivity here
 	}
-
-	/**
-	 * Gets a specific item from the list
-	 */
-
 }

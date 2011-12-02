@@ -1,34 +1,35 @@
 package net.ircapp.adapters;
 
+import net.ircapp.R;
+import net.ircapp.db.Database;
+import android.content.Context;
+import android.database.Cursor;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
+import android.widget.ResourceCursorAdapter;
+import android.widget.TextView;
 
-public class ChannelListAdapter extends BaseAdapter 
+/**
+ * Should be a mirror of the serverlistadapter, for the most part
+ * @author ryan
+ *
+ */
+public class ChannelListAdapter extends ResourceCursorAdapter 
 {
 
-	@Override
-	public int getCount() {
-		// TODO Auto-generated method stub
-		return 0;
+	public ChannelListAdapter(Context ctx, Cursor cursor)
+	{
+		super(ctx, R.layout.channelitem, cursor);
 	}
 
+	/**
+	 * Displays our servers as a list! 
+	 */
 	@Override
-	public Object getItem(int position) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	public void bindView(View view, Context context, Cursor cursor) 
+	{
+		// bind us to the proper textviews
 
-	@Override
-	public long getItemId(int position) {
-		// TODO Auto-generated method stub
-		return 0;
+		
+		// deal with connectivity here
 	}
-
-	@Override
-	public View getView(int position, View convertView, ViewGroup parent) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 }

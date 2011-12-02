@@ -51,7 +51,25 @@ public class ListServersActivity extends ListActivity implements OnItemLongClick
 		this.listview = getListView();
 		this.listview.setOnItemLongClickListener(this);
 	}
-
+	
+	/**
+	 * Clicking on a server should speed you along to the channellist
+	 */
+	public void onListItemClick(ListView l, View v, int position, long id)
+	{
+		// create the new intent
+		Intent i = new Intent(this, ListChannelsActivity.class);
+		
+		/*
+		// add relevent server info -- id too?
+		i.putExtra("serverTitle", server.getServerTitle());
+		i.putExtra("serverHostname", server.getServerHostname());
+		*/
+		
+		// check connection status here
+		
+		startActivity(i);
+	}
 
 	/**
 	 * For when you long-click on a server object in the list
@@ -196,5 +214,4 @@ public class ListServersActivity extends ListActivity implements OnItemLongClick
 
         return true;
     }
-    
 }
