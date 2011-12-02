@@ -120,7 +120,13 @@ public class Server
 			// return false
 		}
 		
+		this.isConnected = true;
 		return true;
+	}
+	
+	public boolean isConnected()
+	{
+		return this.isConnected;
 	}
 	
 	public void disconnect() throws IOException
@@ -128,10 +134,12 @@ public class Server
 		if(isConnected)
 		{
 			System.out.println("removing connection to: " + this.socket);
+			
 			this.bwriter.write(BaseCommands.server_quit);
 			this.bwriter.close();
 			this.breader.close();
 			this.socket.close();
+			this.isConnected = false;
 		}
 	}
 	
@@ -157,6 +165,11 @@ public class Server
 		return this.serverID;
 	}
 	
+	public void setID(long id)
+	{
+		this.serverID = id;
+	}
+	
 	public String getServerTitle()
 	{
 		return this.serverTitle;
@@ -164,7 +177,7 @@ public class Server
 	
 	public String getServerHostname()
 	{
-		return this.getServerHostname();
+		return this.serverHostname;
 	}
 	
 	public int getServerPort()
@@ -194,7 +207,7 @@ public class Server
 	
 	public String toString()
 	{
-		return "[ server title - " + this.serverTitle + " ] --- [ server host - " + this.serverHostname + " ] --- [ server port - " + this.serverPort +
-				" ] --- [ server pass - " + this.password + " ] --- [ nickname - " + this.nickname + " ]";
+		return "[ " + this.serverID + " ] --- [ server title - " + this.serverTitle + " ] --- [ server host - " + this.serverHostname + " ] --- [ server port - " 
+				+ this.serverPort +	" ] --- [ server pass - " + this.password + " ] --- [ nickname - " + this.nickname + " ]";
 	}
 }

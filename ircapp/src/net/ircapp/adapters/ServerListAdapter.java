@@ -17,7 +17,7 @@ public class ServerListAdapter extends ResourceCursorAdapter
 
 	private ArrayList<Server> servers;
 	private Context context;
-	
+
 	public ServerListAdapter(Context ctx, Cursor cursor)
 	{
 		super(ctx, R.layout.serveritem, cursor);
@@ -42,5 +42,5 @@ public class ServerListAdapter extends ResourceCursorAdapter
 	/**
 	 * Gets a specific item from the list
 	 */
-	
+
 }

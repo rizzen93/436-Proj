@@ -26,11 +26,11 @@ import android.widget.ListView;
 
 public class ListServersActivity extends ListActivity implements OnItemLongClickListener
 {
-	
+
 	private ServerListAdapter serverListAdapter;
 	private Database db;
 	private ListView listview;
-	
+
 	/**
 	 * called when the activity is first created
 	 */
@@ -45,38 +45,17 @@ public class ListServersActivity extends ListActivity implements OnItemLongClick
 
 		//db.addServer("ReplayIRC", "irc.replayirc.com", 6667, "", "androidtest", false);
 
-		// grab list cursor
 		Cursor listCursor = db.getServerList();
 		startManagingCursor(listCursor);
-		
+
 		serverListAdapter = new ServerListAdapter(this, listCursor);
 		setListAdapter(serverListAdapter);
-		
-		System.out.println("getting list view");
+
 		this.listview = getListView();
-		
-		System.out.println("setting up onitemclick");
 		this.listview.setOnItemLongClickListener(this);
-		
-		/*this.servers = IRCApp.getInstance().getServerList();
-		System.out.println("got the serverlist from IRCApp.getInstance().getServerList()");
-		
-		
-		this.serverListAdapter = new ServerListAdapter(this, this.servers);
-		System.out.println("made the serverlist adapter");
-		
-		System.out.println("setting the list adapter to serverlistadapter");
-		setListAdapter(this.serverListAdapter);
-		
-		System.out.println("getting list view");
-		this.listview = getListView();
-		
-		System.out.println("setting up onitemclick");
-		this.listview.setOnItemLongClickListener(this);
-		*/
 	}
-	
-	
+
+
 	/**
 	 * For when you long-click on a server object in the list
 	 * Will bring up the context menu
@@ -84,16 +63,14 @@ public class ListServersActivity extends ListActivity implements OnItemLongClick
 	@Override
 	public boolean onItemLongClick(AdapterView<?> l, View v, int position, long id) 
 	{
-		System.out.println("set onclick stuff");
 		// get the server object
-		
-		System.out.println("grabbing cursor");
+
 		final Cursor cursor = (Cursor) serverListAdapter.getItem(position);
 		final long servid = id;
-		
+
 		// list of context options we have
         CharSequence[] submenu = {"Connect", "Disconnect", "Edit", "Delete"};
-		
+
         // create the alert dialog
         AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this);
         alertBuilder.setTitle(cursor.getString(cursor.getColumnIndex(Database.SERVERS_TITLE)));
@@ -130,7 +107,7 @@ public class ListServersActivity extends ListActivity implements OnItemLongClick
 					} 
         			catch (IOException e) 
         			{
-						
+
 						e.printStackTrace();
 					}
         			
@@ -138,7 +115,7 @@ public class ListServersActivity extends ListActivity implements OnItemLongClick
         		case 1:
         			try
                 	{
-        				if(IRCApp.getInstance().getNumConnectedServers() > 0)
+        				if(IRCApp.getInstance().getNumServers() > 0)
         				{
         					IRCApp.getInstance().getServer(cursor).disconnect();
         				}
@@ -165,7 +142,7 @@ public class ListServersActivity extends ListActivity implements OnItemLongClick
         
 		return true;
 	}
-	
+
 	/**
 	 * options menu button clicked
 	 */
@@ -191,26 +168,30 @@ public class ListServersActivity extends ListActivity implements OnItemLongClick
             case R.id.add:
             	// adding a server
                 startActivityForResult(new Intent(this, AddServerActivity.class), 0);
+                
+                // refresh the listview
+                this.serverListAdapter.notifyDataSetChanged();
                 break;
             case R.id.exit:
             	// exiting the app
             	
             	// get all the servers we're connected to
-                ArrayList<Server> allServers = IRCApp.getInstance().getConnectedServersList();
+                ArrayList<Server> allServers = IRCApp.getInstance().getServerList();
                 
                 for(Server s : allServers)
                 {
                 	try
                 	{
                 		// and disconnect
-                		s.disconnect();
-                		
+                		if(s.isConnected())
+                			s.disconnect();
                 	}
                 	catch (IOException e)
                 	{
                 		e.printStackTrace();
                 	}
                 }
+                db.close();
                 finish();
         }
 

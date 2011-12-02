@@ -21,13 +21,6 @@ public class IRCApp
 		this.servers = new ArrayList<Server>();
 	}
 	
-	/*public void loadServersFromDB(Context context)
-	{
-		Database db = new Database(context);
-		this.serversCursor = db.getServerList();
-		db.close();
-	}*/
-	
 	public static IRCApp getInstance()
 	{
 		if(instance == null)
@@ -73,12 +66,12 @@ public class IRCApp
 	 * Get the list of servers.
 	 * @return
 	 */
-	public ArrayList<Server> getConnectedServersList()
+	public ArrayList<Server> getServerList()
 	{	
 		return this.servers;
 	}
 	
-	public int getNumConnectedServers()
+	public int getNumServers()
 	{
 		return this.servers.size();
 	}
