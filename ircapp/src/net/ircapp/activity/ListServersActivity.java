@@ -29,6 +29,7 @@ public class ListServersActivity extends ListActivity implements OnItemLongClick
 	private ServerListAdapter serverListAdapter;
 	private Database db;
 	private ListView listview;
+	Cursor listCursor;
 
 	/**
 	 * called when the activity is first created
@@ -39,12 +40,11 @@ public class ListServersActivity extends ListActivity implements OnItemLongClick
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.serverlist);
 
-		db = new Database(this);
-		db.open();
-
-		Cursor listCursor = db.getServerList();
+		IRCApp.getInstance().initDB(this);
+		
+		listCursor = IRCApp.getInstance().getDB().getServerList();
 		startManagingCursor(listCursor);
-
+		
 		serverListAdapter = new ServerListAdapter(this, listCursor);
 		setListAdapter(serverListAdapter);
 
@@ -67,6 +67,8 @@ public class ListServersActivity extends ListActivity implements OnItemLongClick
 		*/
 		
 		// check connection status here
+		//db.close();
+		//listCursor.close();
 		
 		startActivity(i);
 	}
@@ -208,7 +210,7 @@ public class ListServersActivity extends ListActivity implements OnItemLongClick
                 		e.printStackTrace();
                 	}
                 }
-                db.close();
+                IRCApp.getInstance().getDB().close();
                 finish();
         }
 

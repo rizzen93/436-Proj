@@ -4,47 +4,26 @@ import java.util.ArrayList;
 
 public class Channel 
 {
-	
 	// type of channel
 	private int channelType;
 	
 	// db stuffs
-	private int channelID;
+	private long channelID;
 	private String channelName;
 	private String channelPassword;
 	
-	// chat stuff
-	private String topic;
-	private ArrayList<Message> buffer;
-	private ArrayList<Message> history;
-	private boolean newMessages;
 	
-	public Channel(String name)
+	private String server;
+	
+	private Chat chat;
+	
+	public Channel(String name, String password, String serverTitle)
 	{
-		this.buffer = new ArrayList<Message>();
-		this.history = new ArrayList<Message>();
+		this.channelName = name;
+		this.server = serverTitle;
+		this.channelPassword = password;
 		
-		this.topic = "";
-		this.channelName = name.toLowerCase();
-	}
-	
-	public void addMessage(Message msg)
-	{
-		// we want this newest message to appear first
-		this.buffer.add(0, msg);
-		this.history.add(msg);
-		
-		// msg overflow check here (dont want too many of the damn things)
-	}
-	
-	public ArrayList<Message> getBuffer()
-	{
-		return this.buffer;
-	}
-	
-	public ArrayList<Message> getHistory()
-	{
-		return this.history;
+		this.chat = new Chat(this);
 	}
 	
 	public void setChannelType(int type)
@@ -56,5 +35,30 @@ public class Channel
 	public int getChannelType()
 	{
 		return this.channelType;
+	}
+	
+	public String getChannelName()
+	{
+		return this.channelName;
+	}
+	
+	public String getChannelPassword()
+	{
+		return this.channelPassword;
+	}
+	
+	public String getServerTitle()
+	{
+		return this.server;
+	}
+	
+	public void setID(long id)
+	{
+		this.channelID = id;
+	}
+	
+	public long getID()
+	{
+		return this.channelID;
 	}
 }

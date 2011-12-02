@@ -15,10 +15,12 @@ public class IRCApp
 	
 	private ArrayList<Server> servers;
 	private Cursor serversCursor;
+	private Database globalDB;
 	
 	public IRCApp()
 	{
 		this.servers = new ArrayList<Server>();
+		//this.globalDB = new Database(this);
 	}
 	
 	public static IRCApp getInstance()
@@ -29,6 +31,22 @@ public class IRCApp
 		}
 		
 		return instance;
+	}
+	
+	public void initDB(Context context)
+	{
+		this.globalDB = new Database(context);
+		this.globalDB.open();
+	}
+	
+	public Database getDB()
+	{
+		return this.globalDB;
+	}
+	
+	public void closeDB()
+	{
+		this.globalDB.close();
 	}
 	
 	public Server getServer(Cursor c)

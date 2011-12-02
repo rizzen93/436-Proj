@@ -22,14 +22,17 @@ public class ChannelListAdapter extends ResourceCursorAdapter
 	}
 
 	/**
-	 * Displays our servers as a list! 
+	 * Displays our channels as a list! 
 	 */
 	@Override
 	public void bindView(View view, Context context, Cursor cursor) 
 	{
-		// bind us to the proper textviews
-
+		// bind us to the proper ui stuffs
+		TextView channelName = (TextView) view.findViewById(R.id.channelitem_channelName);
+		TextView channelStatus = (TextView) view.findViewById(R.id.channelitem_joinStatus);
 		
-		// deal with connectivity here
+		channelName.setText(cursor.getString(cursor.getColumnIndex(Database.CHANNELS_NAME)));
+		
+		// deal with join status here
 	}
 }

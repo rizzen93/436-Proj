@@ -34,10 +34,7 @@ public class ListChannelsActivity extends ListActivity implements OnItemLongClic
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.channellist);
 
-		db = new Database(this);
-		db.open();
-
-		Cursor listCursor = db.getServerList();
+		Cursor listCursor = IRCApp.getInstance().getDB().getChannelList();
 		startManagingCursor(listCursor);
 
 		channelListAdapter = new ChannelListAdapter(this, listCursor);

@@ -54,7 +54,7 @@ public class AddServerActivity extends Activity implements OnClickListener
 		
 		// add it to the databse and our serverlist
 		this.addServerToDB(newServer);
-		IRCApp.getInstance().addServer(newServer);
+		//IRCApp.getInstance().addServer(newServer);
 	}
 	
 	public void addServerToDB(Server s)

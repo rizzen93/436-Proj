@@ -1,11 +1,7 @@
 package net.ircapp.adapters;
 
-
-import java.util.ArrayList;
-
 import net.ircapp.R;
 import net.ircapp.db.Database;
-import net.ircapp.model.Server;
 import android.content.Context;
 import android.database.Cursor;
 import android.view.View;
@@ -14,10 +10,7 @@ import android.widget.TextView;
 
 public class ServerListAdapter extends ResourceCursorAdapter 
 {
-
-	private ArrayList<Server> servers;
-	private Context context;
-
+	
 	public ServerListAdapter(Context ctx, Cursor cursor)
 	{
 		super(ctx, R.layout.serveritem, cursor);
