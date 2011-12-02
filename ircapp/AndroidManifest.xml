@@ -25,21 +25,12 @@
         	android:label="@string/addserver">
         </activity>
         <activity
-        	android:name=".activity.JoinChannelActivity"
-        	android:label="@string/joinchannel">
-        </activity>
-        <activity
-        	android:name=".activity.JoinServerActivity"
-        	android:label="@string/joinserver">
-        </activity>
-        <activity
         	android:name=".activity.ListChannelsActivity"
         	android:label="@string/listchannels">
         </activity>
         <activity
         	android:name=".activity.ChatActivity"
-        	android:label="@string/chatlabel"
-        	android:theme="@android:style/Theme.Dialog">
+        	android:label="@string/chatlabel">
        	</activity>
     </application>
     <uses-permission android:name="android.permission.INTERNET" />

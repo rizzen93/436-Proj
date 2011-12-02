@@ -58,6 +58,16 @@ public class Database
 		this.db.close();
 	}
 
+	/**
+	 * Adds a server to SERVERLIST_TABLE
+	 * @param title
+	 * @param hostname
+	 * @param port
+	 * @param password
+	 * @param nickname
+	 * @param autoConnect
+	 * @return
+	 */
 	public long addServer(String title, String hostname, int port, String password, String nickname, boolean autoConnect)
 	{
 		ContentValues values = new ContentValues();
@@ -71,26 +81,44 @@ public class Database
 		return this.db.insert(SERVERLIST_TABLE, null, values);
 	}
 
+	/**
+	 * Gets a cursor containing the server we want, I hope
+	 * @param servertitle
+	 * @return
+	 */
 	public Cursor getServer(String servertitle)
 	{
-		Cursor cursor = db.query(SERVERLIST_TABLE, new String[] {SERVERS_TITLE, SERVERS_ADDRESS, SERVERS_PORT, SERVERS_PASSWORD, SERVERS_NICK}, 
+		return db.query(SERVERLIST_TABLE, new String[] {SERVERS_TITLE, SERVERS_ADDRESS, SERVERS_PORT, SERVERS_PASSWORD, SERVERS_NICK}, 
 				SERVERS_TITLE + "=" + servertitle, null, null, null, null);
-
-		return cursor;
 	}
 
-	public Cursor getChannel()
+	/**
+	 * Gets a cursor containing the channel we want
+	 * @param serverTitle
+	 * @param channelName
+	 * @return
+	 */
+	public Cursor getChannel(String serverTitle, String channelName)
 	{
-		return null;
+		return db.query(CHANNELLIST_TABLE, new String[] {CHANNELS_SERVER, CHANNELS_NAME, CHANNELS_PASSWORD}, 
+				CHANNELS_SERVER + "=" + serverTitle + ", " + CHANNELS_NAME + "=" + channelName, null, null, null, null);
 	}
 
-	public void updateServer()
+	/**
+	 * Adds a channel to CHANNELLIST_TABLE
+	 * @param serverTitle
+	 * @param channelName
+	 * @param channelPassword
+	 * @return
+	 */
+	public long addChannel(String serverTitle, String channelName, String channelPassword)
 	{
-
-	}
-
-	public void addChannel()
-	{
+		ContentValues values = new ContentValues();
+		values.put(CHANNELS_SERVER, serverTitle);
+		values.put(CHANNELS_NAME, channelName);
+		values.put(CHANNELS_PASSWORD, channelPassword);
+		
+		return this.db.insert(CHANNELLIST_TABLE, null, values);
 
 	}
 
@@ -99,12 +127,47 @@ public class Database
 
 	}
 
+	public void updateServer()
+	{
+
+	}
+
+	/**
+	 * Returns a cursor containing all entries in the serverlist table
+	 * @return
+	 */
 	public Cursor getServerList() 
 	{
 		return this.db.query(SERVERLIST_TABLE, new String[] {KEY_ID, SERVERS_TITLE, SERVERS_ADDRESS, SERVERS_PORT, SERVERS_PASSWORD, SERVERS_NICK, SERVERS_AUTOCONNECT}, 
 				null, null, null, null, null);
 	}
 
+	/**
+	 * Returns a cursor containing all entries in the channellist table
+	 * @return
+	 */
+	public Cursor getChannelList()
+	{
+		return this.db.query(CHANNELLIST_TABLE, new String[] {KEY_ID, CHANNELS_SERVER, CHANNELS_NAME, CHANNELS_PASSWORD}, 
+				null, null, null, null, null);
+	}
+	
+	/**
+	 * Returns a cursor containing all channels for a given server title
+	 * @param serverTitle
+	 * @return
+	 */
+	public Cursor getChannelsOnServer(String serverTitle)
+	{
+		return this.db.query(CHANNELLIST_TABLE, new String[] {CHANNELS_SERVER, CHANNELS_NAME, CHANNELS_PASSWORD}, 
+				CHANNELS_SERVER + "=" + serverTitle, null, null, null, null);
+	}
+	
+	/**
+	 * Inner class for use with DB creation & upgrades
+	 * @author ryan
+	 *
+	 */
 	private static class DatabaseHelper extends SQLiteOpenHelper 
 	{
 		DatabaseHelper(Context context) 
@@ -113,12 +176,11 @@ public class Database
 	    }
 
 	    /**
-	     * create tables
+	     * Create Initial tables
 	     */
 		@Override
 		public void onCreate(SQLiteDatabase db)
 		{
-			System.out.println("creating serverlist table");
 			// create serverlist table
 			db.execSQL("CREATE TABLE " + SERVERLIST_TABLE + " ( "
 					+ (String) BaseColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
@@ -130,7 +192,7 @@ public class Database
 					+ SERVERS_AUTOCONNECT + " BOOLEAN );"
 					);
 
-			System.out.println("creating channelist table");
+			
 			// create channellist table
 			db.execSQL("CREATE TABLE " + CHANNELLIST_TABLE + " ( "
 					+ (String) BaseColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
@@ -142,6 +204,9 @@ public class Database
 
 		}
 
+		/**
+		 * On Upgrading the DB
+		 */
 		@Override
 		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) 
 		{	
