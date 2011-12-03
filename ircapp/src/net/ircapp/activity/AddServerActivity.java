@@ -63,11 +63,10 @@ public class AddServerActivity extends Activity implements OnClickListener
 		Database db = new Database(this);	
 		db.open();
 		// get the id while putting it into the db
-		long id = db.addServer(s.getServerTitle(), s.getServerHostname(), s.getServerPort(), s.getServerPassword(), s.getNickname(), false);
+		db.addServer(s.getServerID(), s.getServerTitle(), s.getServerHostname(), s.getServerPort(), s.getServerPassword(), s.getNickname(), false);
 		db.close();
 		
-		// set the id & add it to our global list
-		s.setID(id);
+		// add to global list
 		IRCApp.getInstance().addServer(s);
 		
 	}
@@ -81,7 +80,7 @@ public class AddServerActivity extends Activity implements OnClickListener
 		String nickname = ((EditText) findViewById(R.id.addserver_serverNickname)).getText().toString().trim();
 		boolean autoConnect = false;
 		
-		return new Server(title, hostname, port, password, nickname);
+		return new Server(IRCApp.getInstance().getNumServers(), title, hostname, port, password, nickname);
 	}
 	
 }

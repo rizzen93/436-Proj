@@ -1,5 +1,7 @@
 package net.ircapp.db;
 
+import net.ircapp.model.Channel;
+import net.ircapp.model.Server;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -29,7 +31,6 @@ public class Database
 	public static final String SERVERS_AUTOCONNECT = "autoconnect"; // yes? no?
 
 	// channellist attribute names
-	public static final String CHANNELS_SERVER = "servertitle"; // means this channel belongs to whatever server was designated as being 'Freenode'
 	public static final String CHANNELS_NAME = "channelname"; // #android
 	public static final String CHANNELS_PASSWORD = "password"; 
 
@@ -42,6 +43,7 @@ public class Database
 
 	public Database(Context context)
 	{
+		System.out.println("New Database created");
 		this.context = context;
 	}
 
@@ -50,11 +52,14 @@ public class Database
 		DatabaseHelper dbHelper = new DatabaseHelper(this.context);
 		this.db = dbHelper.getWritableDatabase();
 
+		System.out.println("Database opened for writing");
+		
 		return this;
 	}
 
 	public void close()
 	{
+		System.out.println("Database closed");
 		this.db.close();
 	}
 
@@ -68,9 +73,10 @@ public class Database
 	 * @param autoConnect
 	 * @return
 	 */
-	public long addServer(String title, String hostname, int port, String password, String nickname, boolean autoConnect)
+	public long addServer(int id, String title, String hostname, int port, String password, String nickname, boolean autoConnect)
 	{
 		ContentValues values = new ContentValues();
+		values.put(KEY_ID, id);
 		values.put(SERVERS_TITLE, title);
 		values.put(SERVERS_ADDRESS, hostname);
 		values.put(SERVERS_PORT, port);
@@ -78,16 +84,52 @@ public class Database
 		values.put(SERVERS_NICK, nickname);
 		values.put(SERVERS_AUTOCONNECT, autoConnect);
 
+		System.out.println("Adding server to the DB: " + title);
+		
 		return this.db.insert(SERVERLIST_TABLE, null, values);
 	}
+	
+	public Server getServerFromCursor(Cursor c)
+	{
+		Server s = new Server(c.getInt(c.getColumnIndex(Database.KEY_ID)),
+				c.getString(c.getColumnIndex(Database.SERVERS_TITLE)),
+				c.getString(c.getColumnIndex(Database.SERVERS_ADDRESS)),
+				c.getInt(c.getColumnIndex(Database.SERVERS_PORT)),
+				c.getString(c.getColumnIndex(Database.SERVERS_PASSWORD)),
+				c.getString(c.getColumnIndex(Database.SERVERS_NICK)));
 
+		return s;
+	}
+	
+	public Channel getChannelFromCursor(Cursor c)
+	{
+		//Channel c = new Channel()
+		return null;
+	}
+
+	public void removeServer(int id)
+	{
+		
+	}
+	
 	/**
-	 * Gets a cursor containing the server we want, I hope
+	 * Gets a cursor containing the server we want, via server id
+	 * @param id
+	 * @return
+	 */
+	public Cursor getServer(int id)
+	{
+		return null;
+	}
+	
+	/**
+	 * Gets a cursor containing the server we want, via server title
 	 * @param servertitle
 	 * @return
 	 */
 	public Cursor getServer(String servertitle)
 	{
+		System.out.println("DB Query: GET " + servertitle);
 		return db.query(SERVERLIST_TABLE, new String[] {SERVERS_TITLE, SERVERS_ADDRESS, SERVERS_PORT, SERVERS_PASSWORD, SERVERS_NICK}, 
 				SERVERS_TITLE + "=" + servertitle, null, null, null, null);
 	}
@@ -98,10 +140,11 @@ public class Database
 	 * @param channelName
 	 * @return
 	 */
-	public Cursor getChannel(String serverTitle, String channelName)
+	public Cursor getChannel(int serverID, String channelName)
 	{
-		return db.query(CHANNELLIST_TABLE, new String[] {CHANNELS_SERVER, CHANNELS_NAME, CHANNELS_PASSWORD}, 
-				CHANNELS_SERVER + "=" + serverTitle + ", " + CHANNELS_NAME + "=" + channelName, null, null, null, null);
+		System.out.println("DB Query: GET " + channelName);
+		return db.query(CHANNELLIST_TABLE, new String[] { CHANNELS_NAME, CHANNELS_PASSWORD}, 
+				KEY_ID+ "=" + serverID + ", " + CHANNELS_NAME + "=" + channelName, null, null, null, null);
 	}
 
 	/**
@@ -111,12 +154,14 @@ public class Database
 	 * @param channelPassword
 	 * @return
 	 */
-	public long addChannel(String serverTitle, String channelName, String channelPassword)
+	public long addChannel(int id, String channelName, String channelPassword)
 	{
 		ContentValues values = new ContentValues();
-		values.put(CHANNELS_SERVER, serverTitle);
+		values.put(KEY_ID, id);
 		values.put(CHANNELS_NAME, channelName);
 		values.put(CHANNELS_PASSWORD, channelPassword);
+	
+		System.out.println("Adding new channel to DB: " + channelName);
 		
 		return this.db.insert(CHANNELLIST_TABLE, null, values);
 
@@ -138,6 +183,7 @@ public class Database
 	 */
 	public Cursor getServerList() 
 	{
+		System.out.println("Getting ServerList from DB");
 		return this.db.query(SERVERLIST_TABLE, new String[] {KEY_ID, SERVERS_TITLE, SERVERS_ADDRESS, SERVERS_PORT, SERVERS_PASSWORD, SERVERS_NICK, SERVERS_AUTOCONNECT}, 
 				null, null, null, null, null);
 	}
@@ -148,7 +194,8 @@ public class Database
 	 */
 	public Cursor getChannelList()
 	{
-		return this.db.query(CHANNELLIST_TABLE, new String[] {KEY_ID, CHANNELS_SERVER, CHANNELS_NAME, CHANNELS_PASSWORD}, 
+		System.out.println("Getting ChannelList from DB");
+		return this.db.query(CHANNELLIST_TABLE, new String[] {KEY_ID, CHANNELS_NAME, CHANNELS_PASSWORD}, 
 				null, null, null, null, null);
 	}
 	
@@ -157,10 +204,11 @@ public class Database
 	 * @param serverTitle
 	 * @return
 	 */
-	public Cursor getChannelsOnServer(String serverTitle)
+	public Cursor getChannelsOnServer(int serverID)
 	{
-		return this.db.query(CHANNELLIST_TABLE, new String[] {CHANNELS_SERVER, CHANNELS_NAME, CHANNELS_PASSWORD}, 
-				CHANNELS_SERVER + "=" + serverTitle, null, null, null, null);
+		System.out.println("Getting channels on server: " + serverID);
+		return this.db.query(CHANNELLIST_TABLE, new String[] {KEY_ID, CHANNELS_NAME, CHANNELS_PASSWORD}, 
+				KEY_ID + "=" + serverID, null, null, null, null);
 	}
 	
 	/**
@@ -181,6 +229,7 @@ public class Database
 		@Override
 		public void onCreate(SQLiteDatabase db)
 		{
+			System.out.println("Create serverlist table");
 			// create serverlist table
 			db.execSQL("CREATE TABLE " + SERVERLIST_TABLE + " ( "
 					+ (String) BaseColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
@@ -192,13 +241,12 @@ public class Database
 					+ SERVERS_AUTOCONNECT + " BOOLEAN );"
 					);
 
-			
+			System.out.println("Create channellist table");
 			// create channellist table
 			db.execSQL("CREATE TABLE " + CHANNELLIST_TABLE + " ( "
 					+ (String) BaseColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
 					+ CHANNELS_NAME + " TEXT NOT NULL, "
-					+ CHANNELS_PASSWORD + " TEXT, " 
-					+ CHANNELS_SERVER + " INTEGER );"
+					+ CHANNELS_PASSWORD + " TEXT );" 
 					);
 			// nickname table?
 

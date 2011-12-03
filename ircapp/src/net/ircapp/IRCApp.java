@@ -80,6 +80,10 @@ public class IRCApp
 		this.servers.remove(s);
 	}
 	
+	public void removeServer(int id)
+	{
+		
+	}
 	/**
 	 * Get the list of servers.
 	 * @return

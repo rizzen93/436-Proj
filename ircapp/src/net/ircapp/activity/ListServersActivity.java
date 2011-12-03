@@ -40,11 +40,15 @@ public class ListServersActivity extends ListActivity implements OnItemLongClick
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.serverlist);
 
+		System.out.println("ListServersActivity onCreate");
+		
+		System.out.println("ListServersActivity initDB");
 		IRCApp.getInstance().initDB(this);
 		
 		listCursor = IRCApp.getInstance().getDB().getServerList();
 		startManagingCursor(listCursor);
 		
+		System.out.println("ListServers new ServerListAdapter");
 		serverListAdapter = new ServerListAdapter(this, listCursor);
 		setListAdapter(serverListAdapter);
 
@@ -57,19 +61,26 @@ public class ListServersActivity extends ListActivity implements OnItemLongClick
 	 */
 	public void onListItemClick(ListView l, View v, int position, long id)
 	{
+		System.out.println("OnListItemClick");
 		// create the new intent
 		Intent i = new Intent(this, ListChannelsActivity.class);
 		
-		/*
-		// add relevent server info -- id too?
-		i.putExtra("serverTitle", server.getServerTitle());
-		i.putExtra("serverHostname", server.getServerHostname());
-		*/
+		ArrayList<Server> servers = IRCApp.getInstance().getServerList();
 		
-		// check connection status here
-		//db.close();
-		//listCursor.close();
+		// probably a better way to do this, but whatever
+		for(Server s : servers)
+		{
+			// match server id to the id of the listview item
+			if(s.getServerID() == id)
+			{
+				// stick the server title into the intent as extra data
+				// this should only happen once, i think >>
+				i.putExtra("serverTitle", s.getServerTitle());
+				break;
+			}
+		}
 		
+		// and start the new activity
 		startActivity(i);
 	}
 
@@ -112,7 +123,7 @@ public class ListServersActivity extends ListActivity implements OnItemLongClick
         			String nickname = cursor.getString(cursor.getColumnIndex(Database.SERVERS_NICK));
         			
         			// make new object
-        			Server newServer = new Server(title, hostname, Integer.parseInt(port), password, nickname);
+        			Server newServer = new Server(IRCApp.getInstance().getNumServers(), title, hostname, Integer.parseInt(port), password, nickname);
         			IRCApp.getInstance().addServer(newServer);
         			
         			System.out.println(newServer.toString());
@@ -162,6 +173,11 @@ public class ListServersActivity extends ListActivity implements OnItemLongClick
 		return true;
 	}
 
+	public void deleteServer(int id)
+	{
+		IRCApp.getInstance().removeServer(id);
+	}
+	
 	/**
 	 * options menu button clicked
 	 */

@@ -8,19 +8,16 @@ public class Channel
 	private int channelType;
 	
 	// db stuffs
-	private long channelID;
+	private int serverID;
 	private String channelName;
 	private String channelPassword;
 	
-	
-	private String server;
-	
 	private Chat chat;
 	
-	public Channel(String name, String password, String serverTitle)
+	public Channel(int ID, String channelName, String password)
 	{
-		this.channelName = name;
-		this.server = serverTitle;
+		this.serverID = ID;
+		this.channelName = channelName;
 		this.channelPassword = password;
 		
 		this.chat = new Chat(this);
@@ -47,18 +44,13 @@ public class Channel
 		return this.channelPassword;
 	}
 	
-	public String getServerTitle()
+	public void setID(int id)
 	{
-		return this.server;
+		this.serverID = id;
 	}
 	
-	public void setID(long id)
+	public int getID()
 	{
-		this.channelID = id;
-	}
-	
-	public long getID()
-	{
-		return this.channelID;
+		return this.serverID;
 	}
 }

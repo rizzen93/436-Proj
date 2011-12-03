@@ -8,14 +8,15 @@ import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.util.ArrayList;
 
-import net.ircapp.commands.BaseCommands;
+import net.ircapp.commands.Constants;
 import net.ircapp.threads.InputThread;
+import net.ircapp.threads.OutputThread;
 
 public class Server 
 {
 
 	// server attributes
-	private long serverID;
+	private int serverID;
 	private String serverTitle;
 	private String serverHostname;
 	private int serverPort;
@@ -28,6 +29,10 @@ public class Server
 	
 	// channel stuffs?
 	private ArrayList<Channel> channels;
+	
+	private String currentChannel;
+	private InputThread inputThread;
+	//private OutputThread outputThread;
 	
 	// connection stuffs
 	private Socket socket;
@@ -46,11 +51,11 @@ public class Server
 	 * @param password password for when connecting?
 	 * @param nick default nickname for the server
 	 */
-	public Server(String title, String hostname, int port, String password, String nick)
+	public Server(int id, String title, String hostname, int port, String password, String nick)
 	{
 		this.channels = new ArrayList<Channel>();
 		
-		//this.serverID = id;
+		this.serverID = id;
 		this.serverTitle = title;
 		this.serverHostname = hostname;
 		this.serverPort = port;
@@ -60,8 +65,8 @@ public class Server
 		status = 0;
 		this.isConnected = false;
 		
-		//new InputThread();
-		//new OutputThread() do i really need these?
+		
+		System.out.println("New Server: " + this.toString());
 	}
 	
 	/**
@@ -80,10 +85,10 @@ public class Server
 		this.bwriter = new BufferedWriter(out);
 		
 		// NICK <username>\n\r
-		this.bwriter.write(BaseCommands.server_nick + this.nickname + this.end);
+		this.bwriter.write(Constants.server_nick + this.nickname + this.end);
 		
 		// USER <username> <hostname> <servername> :<realname>\n\r
-		this.bwriter.write(BaseCommands.server_user + this.nickname + " 8 * :" + this.nickname + this.end);
+		this.bwriter.write(Constants.server_user + this.nickname + " 8 * :" + this.nickname + this.end);
 		this.bwriter.flush();
 		
 		// find out if we're connected!
@@ -98,27 +103,28 @@ public class Server
 				break;
 			}
 			
-			if(line.startsWith(BaseCommands.server_ping))
+			if(line.startsWith(Constants.server_ping))
 			{
 				// reply PONG
-				bwriter.write(BaseCommands.server_pong + line.substring(5));
-				bwriter.flush();
+				this.sendPong(Constants.server_pong + line.substring(5));
 				
 				/*
 				 * for servers that require you to pong back before accepting any more input
 				 */
 				
 				// NICK <username>\n\r
-				this.bwriter.write(BaseCommands.server_nick + this.nickname + this.end);
+				this.bwriter.write(Constants.server_nick + this.nickname + this.end);
 				
 				// USER <username> <hostname> <servername> :<realname>\n\r
-				this.bwriter.write(BaseCommands.server_user + this.nickname + " 8 * :" + this.nickname + this.end);
+				this.bwriter.write(Constants.server_user + this.nickname + " 8 * :" + this.nickname + this.end);
 				this.bwriter.flush();
 			}
 			
 			// checks here for nick in use, etc
 			// return false
 		}
+		
+		new InputThread(this);
 		
 		this.isConnected = true;
 		return true;
@@ -135,7 +141,7 @@ public class Server
 		{
 			System.out.println("removing connection to: " + this.socket);
 			
-			this.bwriter.write(BaseCommands.server_quit);
+			this.bwriter.write(Constants.server_quit);
 			this.bwriter.close();
 			this.breader.close();
 			this.socket.close();
@@ -155,17 +161,28 @@ public class Server
 		
 	}
 	
+	public void sendPong(String pong) throws IOException
+	{
+		this.bwriter.write(pong);
+		this.bwriter.flush();
+	}
+	
+	public BufferedReader getReader()
+	{
+		return this.breader;
+	}
+	
 	public void setTitle(String t)
 	{
 		this.serverTitle = t;
 	}
 	
-	public long getServerID()
+	public int getServerID()
 	{
 		return this.serverID;
 	}
 	
-	public void setID(long id)
+	public void setID(int id)
 	{
 		this.serverID = id;
 	}

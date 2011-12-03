@@ -18,6 +18,7 @@ public class AddChannelActivity extends Activity implements OnClickListener
 	private EditText channelName;
 	private EditText channelPassword;
 
+	private int serverID;
 	/**
 	 * On Create
 	 */
@@ -25,6 +26,11 @@ public class AddChannelActivity extends Activity implements OnClickListener
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.joinchannel);
+		
+		Bundle extras = getIntent().getExtras();
+		
+		if(extras != null)
+			this.serverID = extras.getInt("serverID", serverID);
 		
 		this.joinButton = (Button) findViewById(R.id.joinchannel_joinButton);
 		this.channelName = (EditText) findViewById(R.id.joinchannel_channelName);
@@ -67,12 +73,11 @@ public class AddChannelActivity extends Activity implements OnClickListener
 		db.open();
 		
 		// insert the channel, and get it's id
-		long cID = db.addChannel(c.getServerTitle(), c.getChannelName(), c.getChannelPassword());
+		db.addChannel(this.serverID, c.getChannelName(), c.getChannelPassword());
 		
 		db.close();
 		
 		// give the channel it'd id
-		c.setID(cID);
 		//IRCApp.getInstance().getServer(c.getServer())
 	}
 	
@@ -84,8 +89,8 @@ public class AddChannelActivity extends Activity implements OnClickListener
 	{
 		String name = ((EditText) findViewById(R.id.joinchannel_channelName)).getText().toString().trim();
 		String password = ((EditText) findViewById(R.id.joinchannel_channelPassword)).getText().toString().trim();
-		String serverTitle = "gamesurge"; // default for now
-		return new Channel(name, password, serverTitle);
+		
+		return new Channel(serverID, name, password);
 	}
 	
 }
