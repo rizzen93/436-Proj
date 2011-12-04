@@ -5,11 +5,14 @@
   android:layout_width="match_parent"
   android:layout_height="match_parent" android:weightSum="1">
     <LinearLayout android:id="@+id/linearLayout1" android:layout_width="match_parent" android:orientation="vertical" android:layout_height="match_parent" android:weightSum="1">
-        <EditText android:layout_height="wrap_content" android:layout_width="match_parent" android:inputType="textMultiLine" android:layout_weight="0.90" android:id="@+id/channelview_chatlog">
+        <EditText android:layout_height="wrap_content" android:layout_width="match_parent" android:inputType="textMultiLine" android:id="@+id/channelview_chatLog" android:editable="false" android:layout_weight="0.86">
         </EditText>
-        <EditText android:layout_height="wrap_content" android:layout_width="match_parent" android:layout_weight="0.04" android:id="@+id/channelview_chatline">
-            <requestFocus></requestFocus>
-        </EditText>
+        <RelativeLayout android:layout_height="wrap_content" android:layout_width="match_parent" android:id="@+id/relativeLayout1" android:layout_weight="0.13">
+            <EditText android:inputType="textPersonName" android:layout_height="wrap_content" android:layout_width="wrap_content" android:layout_centerVertical="true" android:layout_alignParentLeft="true" android:id="@+id/channelview_chatLine" android:layout_toLeftOf="@+id/channelview_sendButton">
+                <requestFocus></requestFocus>
+            </EditText>
+            <Button android:layout_height="wrap_content" android:layout_width="wrap_content" android:layout_alignBaseline="@+id/channelview_chatLine" android:layout_alignBottom="@+id/channelview_chatLine" android:layout_alignParentRight="true" android:id="@+id/channelview_sendButton" android:text="@string/send_button"></Button>
+        </RelativeLayout>
     </LinearLayout>
     
 </LinearLayout>
