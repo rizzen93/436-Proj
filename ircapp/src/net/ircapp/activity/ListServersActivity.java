@@ -123,13 +123,11 @@ public class ListServersActivity extends ListActivity implements OnItemLongClick
         			// disconnect
         			try
                 	{
-        				Server s = IRCApp.getInstance().getServer(cursor);
-        				if(IRCApp.getInstance().getNumServers() > 0)
-        				{
-        					if(s.isConnected())
-        						s.disconnect();
+        				Server s = IRCApp.getInstance().getServerFromCursor(cursor);
+
+        				if(s.isConnected())
+        					s.disconnect();
         						
-        				}
                 	}
                 	catch (IOException e)
                 	{

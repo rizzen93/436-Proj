@@ -57,9 +57,13 @@ public class InputThread extends Thread
 		{
 			this.server.sendPong(Constants.server_pong + line.substring(5));
 		}
+		
 		String[] message = line.split(" ");
 		
-		System.out.println(message.length);
+		if(message.length == 4)
+		{
+			System.out.println("WE GOTS A TEXT MESSAGE");
+		}
 		
 	}
 	

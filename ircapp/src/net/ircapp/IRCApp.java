@@ -17,12 +17,19 @@ public class IRCApp
 	private Cursor serversCursor;
 	private Database globalDB;
 	
+	/**
+	 * Constructor
+	 */
 	public IRCApp()
 	{
 		this.servers = new ArrayList<Server>();
 		//this.globalDB = new Database(this);
 	}
 	
+	/**
+	 * Gets a global instance of the app
+	 * @return
+	 */
 	public static IRCApp getInstance()
 	{
 		if(instance == null)
@@ -33,27 +40,61 @@ public class IRCApp
 		return instance;
 	}
 	
+	/**
+	 * Initializes the DB
+	 * @param context
+	 */
 	public void initDB(Context context)
 	{
 		this.globalDB = new Database(context);
 		this.globalDB.open();
 	}
 	
+	/**
+	 * Gets DB for writing
+	 * @return
+	 */
 	public Database getDB()
 	{
 		return this.globalDB;
 	}
 	
+	/**
+	 * Closes the writable db.
+	 */
 	public void closeDB()
 	{
 		this.globalDB.close();
 	}
 	
-	public Server getServer(Cursor c)
+	/**
+	 * Finds and returns a Server with the specified id
+	 * @param id
+	 * @return
+	 */
+	public Server getServerFromID(int id)
 	{
 		for(Server s : this.servers)
 		{
-			if(s.getServerTitle().equals(c.getString(c.getColumnIndex(Database.SERVERS_TITLE))))
+			if(s.getServerID() == id)
+			{
+				return s;
+			}
+		}
+		
+		return null;
+	}
+	
+	/**
+	 * 
+	 * @param c
+	 * @return
+	 */
+	public Server getServerFromCursor(Cursor c)
+	{
+		for(Server s : this.servers)
+		{
+			if(s.getServerID() == c.getInt(c.getColumnIndex(Database.KEY_ID)))
 			{
 				return s;
 			}
@@ -91,6 +132,10 @@ public class IRCApp
 		return this.servers;
 	}
 	
+	/**
+	 * Gets the total number of servers in the list.
+	 * @return
+	 */
 	public int getNumServers()
 	{
 		return this.servers.size();
