@@ -27,7 +27,6 @@ public class ListServersActivity extends ListActivity implements OnItemLongClick
 {
 
 	private ServerListAdapter serverListAdapter;
-	private Database db;
 	private ListView listview;
 	Cursor listCursor;
 
@@ -73,8 +72,10 @@ public class ListServersActivity extends ListActivity implements OnItemLongClick
 			// match server id to the id of the listview item
 			if(s.getServerID() == id)
 			{
+				System.out.println("comparing: " + s.getServerID() + " == " + id);
 				// stick the server title into the intent as extra data
 				// this should only happen once, i think >>
+				i.putExtra("serverID", s.getServerID());
 				i.putExtra("serverTitle", s.getServerTitle());
 				break;
 			}
@@ -91,11 +92,12 @@ public class ListServersActivity extends ListActivity implements OnItemLongClick
 	@Override
 	public boolean onItemLongClick(AdapterView<?> l, View v, int position, long id) 
 	{
-		// get the server object
-
+		// get object from the listadapter
 		final Cursor cursor = (Cursor) serverListAdapter.getItem(position);
-		final long servid = id;
 
+		// make new object
+		final Server newServer = IRCApp.getInstance().getDB().getServerFromCursor(cursor);
+		
 		// list of context options we have
         CharSequence[] submenu = {"Connect", "Disconnect", "Edit", "Delete"};
 
@@ -111,22 +113,7 @@ public class ListServersActivity extends ListActivity implements OnItemLongClick
         		{
         		case 0:
         			// connect to server
-        			System.out.println("chose to connect to server");
-        			
-        			//Cursor c = db.getServer(servid);  			
-      
-        			// get the server attributes from database
-        			String title = cursor.getString(cursor.getColumnIndex(Database.SERVERS_TITLE));
-        			String hostname = cursor.getString(cursor.getColumnIndex(Database.SERVERS_ADDRESS));
-        			String port = cursor.getString(cursor.getColumnIndex(Database.SERVERS_PORT)); 
-        			String password = cursor.getString(cursor.getColumnIndex(Database.SERVERS_PASSWORD));
-        			String nickname = cursor.getString(cursor.getColumnIndex(Database.SERVERS_NICK));
-        			
-        			// make new object
-        			Server newServer = new Server(IRCApp.getInstance().getNumServers(), title, hostname, Integer.parseInt(port), password, nickname);
-        			IRCApp.getInstance().addServer(newServer);
-        			
-        			System.out.println(newServer.toString());
+        			System.out.println("chose to connect to server");	
         			try 
         			{
         				// connect to the irc server
@@ -141,15 +128,16 @@ public class ListServersActivity extends ListActivity implements OnItemLongClick
         			
         			break;
         		case 1:
+        			// disconnect
         			try
                 	{
+        				Server s = IRCApp.getInstance().getServer(cursor);
         				if(IRCApp.getInstance().getNumServers() > 0)
         				{
-        					if(IRCApp.getInstance().getServer(cursor).isConnected())
-        						IRCApp.getInstance().getServer(cursor).disconnect();
+        					if(s.isConnected())
+        						s.disconnect();
         						
         				}
-        				//server.disconnect();
                 	}
                 	catch (IOException e)
                 	{
@@ -161,6 +149,8 @@ public class ListServersActivity extends ListActivity implements OnItemLongClick
         			break;
         		case 3:
         			// delete server from list
+        			IRCApp.getInstance().removeServer(newServer);
+        	        serverListAdapter.notifyDataSetChanged();
         			break;
         		}
         	}
@@ -173,11 +163,6 @@ public class ListServersActivity extends ListActivity implements OnItemLongClick
 		return true;
 	}
 
-	public void deleteServer(int id)
-	{
-		IRCApp.getInstance().removeServer(id);
-	}
-	
 	/**
 	 * options menu button clicked
 	 */
@@ -186,6 +171,7 @@ public class ListServersActivity extends ListActivity implements OnItemLongClick
     {
         super.onCreateOptionsMenu(menu);
 
+        // create and populate the menu
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.serversmenu, menu);
 

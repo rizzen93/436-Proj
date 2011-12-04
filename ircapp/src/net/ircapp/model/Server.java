@@ -77,6 +77,8 @@ public class Server
 	public boolean connect() throws IOException
 	{
 		this.socket = new Socket(this.serverHostname, this.serverPort);
+	
+		System.out.println("Connecting over: " + this.socket);
 		
 		InputStreamReader in = new InputStreamReader(this.socket.getInputStream());
 		OutputStreamWriter out = new OutputStreamWriter(this.socket.getOutputStream());

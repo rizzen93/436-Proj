@@ -77,13 +77,11 @@ public class IRCApp
 	 */
 	public void removeServer(Server s)
 	{
+		System.out.println("Removing: " + s);
 		this.servers.remove(s);
+		this.globalDB.removeServer(s.getServerID());
 	}
 	
-	public void removeServer(int id)
-	{
-		
-	}
 	/**
 	 * Get the list of servers.
 	 * @return

@@ -63,7 +63,7 @@ public class AddServerActivity extends Activity implements OnClickListener
 		Database db = new Database(this);	
 		db.open();
 		// get the id while putting it into the db
-		db.addServer(s.getServerID(), s.getServerTitle(), s.getServerHostname(), s.getServerPort(), s.getServerPassword(), s.getNickname(), false);
+		db.addServer(s.getServerTitle(), s.getServerHostname(), s.getServerPort(), s.getServerPassword(), s.getNickname());
 		db.close();
 		
 		// add to global list

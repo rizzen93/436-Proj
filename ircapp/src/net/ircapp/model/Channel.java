@@ -8,11 +8,15 @@ public class Channel
 	private int channelType;
 	
 	// db stuffs
-	private int serverID;
 	private String channelName;
 	private String channelPassword;
 	
+	// for handling chat type stuffs
 	private Chat chat;
+	
+	// server info
+	private int serverID;
+	private Server server;
 	
 	public Channel(int ID, String channelName, String password)
 	{
@@ -21,6 +25,16 @@ public class Channel
 		this.channelPassword = password;
 		
 		this.chat = new Chat(this);
+	}
+	
+	public void setParentServer(Server s)
+	{
+		this.server = s;
+	}
+	
+	public Server getParentServer()
+	{
+		return this.server;
 	}
 	
 	public void setChannelType(int type)
