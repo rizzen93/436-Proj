@@ -61,9 +61,36 @@ public class InputThread extends Thread
 		
 		String[] message = line.split(" ");
 		
+		/**
+		 * ITS PARSING TIME!
+		 */
 		if(message.length == 4)
 		{
-			IRCApp.getInstance().updateChatlog(server.getServerID(), message[0], message[1], message[2], message[3]);
+			String stuff = message[0];
+			String command = message[1];
+			String target = message[2];
+			String msg = message[3];
+			
+			// to deal with the sender's info
+			String senderNick;
+			String senderLogin;
+			String senderHost;
+			int ex = stuff.indexOf("!");
+			int at = stuff.indexOf("@");
+			
+			// make sure the command is all proper
+			command = command.toUpperCase();
+			
+			// deal with the sender info
+			if(stuff.startsWith(":"))
+			{
+				senderNick = stuff.substring(1, ex);
+				senderLogin = stuff.substring(ex + 1, at);
+				senderHost = stuff.substring(at + 1);
+				System.out.println(senderNick +" - " + senderLogin + " - " + senderHost);
+			}
+			
+
 		}
 		
 	}

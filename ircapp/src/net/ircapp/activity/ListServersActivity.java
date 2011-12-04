@@ -225,9 +225,9 @@ public class ListServersActivity extends ListActivity implements OnItemLongClick
                 {
                 	try
                 	{
+                		System.out.println("trying to disconnect from: " + s.getServerTitle());
                 		// and disconnect
-                		if(s.isConnected())
-                			s.disconnect();
+                		s.disconnect();
                 	}
                 	catch (IOException e)
                 	{

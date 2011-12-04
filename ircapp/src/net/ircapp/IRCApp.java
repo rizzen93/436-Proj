@@ -192,5 +192,7 @@ public class IRCApp
 	public void updateChatlog(int serverid, String username, String command, String channelName, String message) 
 	{
 		System.out.println("TEXT RECEIVED: " + message + " from " + channelName);
+		int ex = username.indexOf("!");
+		
 	}
 }

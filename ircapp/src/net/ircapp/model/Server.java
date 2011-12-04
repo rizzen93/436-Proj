@@ -150,7 +150,7 @@ public class Server
 		{
 			System.out.println("removing connection to: " + this.socket);
 			
-			this.bwriter.write(Constants.server_quit + " :Disconnecting");
+			this.bwriter.write(Constants.server_quit + " :Disconnecting" + this.end);
 			this.bwriter.close();
 			this.breader.close();
 			this.socket.close();
