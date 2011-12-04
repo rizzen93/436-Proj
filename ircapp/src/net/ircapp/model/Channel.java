@@ -19,6 +19,8 @@ public class Channel
 	private Server server;
 	private String nickname;
 	
+	private boolean inChannel;
+	
 	public Channel(int servID, String channelName, String password)
 	{
 		this.serverID = servID;
@@ -26,6 +28,16 @@ public class Channel
 		this.channelPassword = password;
 		
 		this.chat = new Chat(this);
+	}
+	
+	public void setInChannel(boolean b)
+	{
+		this.inChannel = b;
+	}
+	
+	public boolean getInChannel()
+	{
+		return this.inChannel;
 	}
 	
 	public String getNick()

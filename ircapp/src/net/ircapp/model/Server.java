@@ -153,7 +153,8 @@ public class Server
 	
 	public void joinChannel(String channel) throws IOException
 	{
-		this.bwriter.write("JOIN #" + channel + this.end);
+		System.out.println("SERVER: " + this.serverID + " joining "+ channel);
+		this.bwriter.write("JOIN " + channel + this.end);
 		this.bwriter.flush();
 	}
 	

@@ -67,7 +67,7 @@ public class AddServerActivity extends Activity implements OnClickListener
 		//db.close();
 		
 		// add to global list
-		IRCApp.getInstance().addServer(s);
+		//IRCApp.getInstance().addConnectedServer(s);
 		
 	}
 	
@@ -80,7 +80,7 @@ public class AddServerActivity extends Activity implements OnClickListener
 		String nickname = ((EditText) findViewById(R.id.addserver_serverNickname)).getText().toString().trim();
 		boolean autoConnect = false;
 		
-		return new Server(IRCApp.getInstance().getNumServers(), title, hostname, port, password, nickname);
+		return new Server((int) IRCApp.getInstance().getTotalNumServers(), title, hostname, port, password, nickname);
 	}
 	
 }

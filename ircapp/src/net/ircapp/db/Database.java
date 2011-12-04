@@ -10,6 +10,7 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.database.sqlite.SQLiteStatement;
 import android.provider.BaseColumns;
 import android.util.Log;
 
@@ -170,6 +171,7 @@ public class Database
 		Cursor c = db.query(SERVERLIST_TABLE, new String[] {KEY_ID, SERVERS_TITLE, SERVERS_ADDRESS, SERVERS_PORT, SERVERS_PASSWORD, SERVERS_NICK}, 
 				KEY_ID + "=" + id, null, null, null, null);
 		c.moveToFirst();
+
 		return c;
 	}
 	
@@ -185,6 +187,7 @@ public class Database
 		Cursor c = db.query(CHANNELLIST_TABLE, new String[] { CHANNELS_SERVID, CHANNELS_NAME, CHANNELS_PASSWORD}, 
 			CHANNELS_NAME + "='" + channelName+"'", null, null, null, null);
 		c.moveToFirst();
+
 		return c;
 	}
 
@@ -218,6 +221,13 @@ public class Database
 
 	}
 
+	public long getNumRows(String tablename)
+	{
+		String sql = "SELECT COUNT(*) FROM " + tablename;
+		SQLiteStatement state = this.db.compileStatement(sql);
+		return state.simpleQueryForLong();
+	}
+	
 	/**
 	 * Returns a cursor containing all entries in the serverlist table
 	 * @return

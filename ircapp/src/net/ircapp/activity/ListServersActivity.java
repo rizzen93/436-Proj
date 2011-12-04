@@ -43,26 +43,24 @@ public class ListServersActivity extends ListActivity implements OnItemLongClick
 
 		setTitle("IRCApp -- Server List");
 		
-		System.out.println("ListServersActivity onCreate");
-		
+		// check if the db is initialized yet
 		if(!IRCApp.getInstance().isDBInitialized())
-		{
-			System.out.println("ListServersActivity initDB");
 			IRCApp.getInstance().initDB(this);
-		}
 		else
 			IRCApp.getInstance().getDB().open();
 
-		
+		// grab the serverlist for display in the listview
 		listCursor = IRCApp.getInstance().getDB().getServerList();
 		startManagingCursor(listCursor);
 		
-		System.out.println("ListServers new ServerListAdapter");
+		// start the adapter
 		serverListAdapter = new ServerListAdapter(this, listCursor);
 		setListAdapter(serverListAdapter);
 
 		this.listview = getListView();
 		this.listview.setOnItemLongClickListener(this);
+		
+		System.out.println("# SERVERS: " + IRCApp.getInstance().getDB().getNumRows(Database.SERVERLIST_TABLE));
 	}
 	
 	/**
@@ -119,22 +117,26 @@ public class ListServersActivity extends ListActivity implements OnItemLongClick
         			try 
         			{
 				
-        				// connect to the irc server
+        				// construct the server from database
 						Server s = IRCApp.getInstance().getServerFromID(serverID);
 						
         				// create status channel
-						Cursor chan = IRCApp.getInstance().getDB().getChannel(serverID, serverTitle + " status");
-						chan.moveToFirst();
+						/*Cursor chan = IRCApp.getInstance().getDB().getChannel(serverID, serverTitle + " status");
 						
-						if(chan.isNull(chan.getColumnIndex(Database.CHANNELS_NAME)))
+				
+						if(!chan.moveToFirst())
 						{
-							
 							IRCApp.getInstance().getDB().addChannel(serverID, serverTitle + " status", "");
 						}else
 							System.out.println("WE ALRAEDY GOT ONE");
+						*/
 						
+						// connect to it
 						s.connect();
-						s.joinChannel("#phx");
+						
+						// add it to the list of connected servers
+						IRCApp.getInstance().addConnectedServer(s);
+						//s.joinChannel("#phx");
 					} 
         			catch (IOException e) 
         			{
@@ -212,7 +214,7 @@ public class ListServersActivity extends ListActivity implements OnItemLongClick
             	// exiting the app
             	
             	// get all the servers we're connected to
-                ArrayList<Server> allServers = IRCApp.getInstance().getServerList();
+                ArrayList<Server> allServers = IRCApp.getInstance().getConnectedServerList();
                 
                 for(Server s : allServers)
                 {

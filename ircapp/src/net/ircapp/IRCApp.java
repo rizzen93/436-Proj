@@ -14,8 +14,7 @@ public class IRCApp
 
 	public static IRCApp instance;
 	
-	private ArrayList<Server> servers;
-	private Cursor serversCursor;
+	private ArrayList<Server> connectedServers;
 	private Database globalDB;
 	private boolean dbInitialized = false;
 	
@@ -24,7 +23,7 @@ public class IRCApp
 	 */
 	public IRCApp()
 	{
-		this.servers = new ArrayList<Server>();
+		this.connectedServers = new ArrayList<Server>();
 		//this.globalDB = new Database(this);
 	}
 	
@@ -105,33 +104,23 @@ public class IRCApp
 	}
 	
 
-	public Server getServerFromTitle(String title)
-	{
-		for(Server s : this.servers)
-		{
-			if(s.getServerTitle().equals(title))
-				return s;
-		}
-		return null;
-	}
-	
 	/**
 	 * Add server to list.
 	 * @param s
 	 */
-	public void addServer(Server s)
+	public void addConnectedServer(Server s)
 	{
-		this.servers.add(s);
+		this.connectedServers.add(s);
 	}
 	
 	/**
 	 * Remove server from list.
 	 * @param s
 	 */
-	public void removeServer(Server s)
+	public void removeConnectedServer(Server s)
 	{
 		System.out.println("Removing: " + s);
-		this.servers.remove(s);
+		this.connectedServers.remove(s);
 		this.globalDB.removeServer(s.getServerID());
 	}
 	
@@ -139,26 +128,62 @@ public class IRCApp
 	 * Get the list of servers.
 	 * @return
 	 */
-	public ArrayList<Server> getServerList()
+	public ArrayList<Server> getConnectedServerList()
 	{	
-		return this.servers;
+		return this.connectedServers;
 	}
 	
 	/**
-	 * Gets the total number of servers in the list.
+	 * Gets the total number of servers we're connected to
 	 * @return
 	 */
-	public int getNumServers()
+	public int getNumConnectedServers()
 	{
-		return this.servers.size();
+		return this.connectedServers.size();
+	}
+	
+	/**
+	 * Gets the total number of servers in the serverlist table
+	 * @return
+	 */
+	public long getTotalNumServers()
+	{
+		return this.globalDB.getNumRows(Database.SERVERLIST_TABLE);
 	}
 
+	/**
+	 * Sends a message to a specific channel on a specific server
+	 * @param servID
+	 * @param channelName
+	 * @param text
+	 * @throws IOException
+	 */
 	public void sendText(int servID, String channelName, String text) throws IOException 
 	{
-		Server s = this.getServerFromID(servID);
+		//Server s = this.getServerFromID(servID);
+		Server s = this.getConnectedServer(servID);
+		
+		// null check
+		
 		if(s.isConnected())
 		{
 			s.sendTextToChannel(channelName, text);
 		}
+	}
+	
+	/**
+	 * Gets a specific server that we're connected to via it's id
+	 * @param serverid
+	 * @return
+	 */
+	public Server getConnectedServer(int serverid)
+	{
+		for(Server s: this.connectedServers)
+		{
+			if(s.getServerID() == serverid+1)
+				return s;
+		}
+		
+		return null;
 	}
 }

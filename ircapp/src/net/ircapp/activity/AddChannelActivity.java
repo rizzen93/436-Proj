@@ -58,30 +58,11 @@ public class AddChannelActivity extends Activity implements OnClickListener
 		// construct the channel from the ui components
 		Channel c = this.getChannelFromActivity();
 		
-		// add it to the db, and the serverlist...
-		addChannelToDB(c);
+		// add it to the db
+		IRCApp.getInstance().getDB().addChannel(this.serverID, c.getChannelName(), c.getChannelPassword());
 		
 	}
-	
-	/**
-	 * Add the channel to the table in the DB
-	 * @param c
-	 */
-	private void addChannelToDB(Channel c)
-	{
-		// get and open the db
-		Database db = IRCApp.getInstance().getDB();
-		//db.open();
-		
-		// insert the channel, and get it's id
-		db.addChannel(this.serverID, c.getChannelName(), c.getChannelPassword());
-		
-		//db.close();
-		
-		// give the channel it'd id
-		//IRCApp.getInstance().getServer(c.getServer())
-	}
-	
+
 	/**
 	 * Construct and return the channel from UI components
 	 * @return

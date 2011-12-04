@@ -16,6 +16,7 @@ import android.widget.TextView;
 import net.ircapp.IRCApp;
 import net.ircapp.R;
 import net.ircapp.adapters.ChannelListAdapter;
+import net.ircapp.db.Database;
 import net.ircapp.model.Channel;
 
 public class ListChannelsActivity extends ListActivity implements OnItemLongClickListener
@@ -33,8 +34,6 @@ public class ListChannelsActivity extends ListActivity implements OnItemLongClic
 		// default stuff, set the layout
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.channellist);
-		
-		System.out.println("ListChannels onCreate()");
 		
 		Bundle extras = getIntent().getExtras();
 		
@@ -59,6 +58,8 @@ public class ListChannelsActivity extends ListActivity implements OnItemLongClic
 		// set the listview & long clicks
 		this.listview = getListView();
 		this.listview.setOnItemLongClickListener(this);
+		
+		System.out.println("# CHANNELS: " + IRCApp.getInstance().getDB().getNumRows(Database.CHANNELLIST_TABLE));
 	}
 
 	/**
@@ -85,16 +86,25 @@ public class ListChannelsActivity extends ListActivity implements OnItemLongClic
 	{
 		Intent i = new Intent(this, ChatActivity.class);
 		
+		// grab the channelname
 		TextView tx = (TextView) v.findViewById(R.id.channelitem_channelName);
 		String name = tx.getText().toString().trim();
 		
+		// toss in the extra bits we'll need at the chat level
 		i.putExtra("channelName", name);
 		i.putExtra("serverid", serverID);
-		/*
-		// and relevent channel info
-		i.putExtra("channelName", channel.getChannelName());
-		i.putExtra("channeHost", channel.getHostname()?);
-		*/
+		
+		// and join the channel we're clicking on
+		try
+		{
+			IRCApp.getInstance().getConnectedServer(this.serverID).joinChannel(name);
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+		
+		// finally, start the activity
 		startActivity(i);
 	}
 
