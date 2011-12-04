@@ -3,6 +3,7 @@ package net.ircapp.threads;
 import java.io.BufferedReader;
 import java.io.IOException;
 
+import net.ircapp.IRCApp;
 import net.ircapp.commands.Constants;
 import net.ircapp.model.Server;
 
@@ -62,7 +63,7 @@ public class InputThread extends Thread
 		
 		if(message.length == 4)
 		{
-			System.out.println("WE GOTS A TEXT MESSAGE");
+			IRCApp.getInstance().updateChatlog(server.getServerID(), message[0], message[1], message[2], message[3]);
 		}
 		
 	}

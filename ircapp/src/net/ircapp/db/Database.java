@@ -225,7 +225,9 @@ public class Database
 	{
 		String sql = "SELECT COUNT(*) FROM " + tablename;
 		SQLiteStatement state = this.db.compileStatement(sql);
-		return state.simpleQueryForLong();
+		long rows = state.simpleQueryForLong();
+		state.close();
+		return rows;
 	}
 	
 	/**

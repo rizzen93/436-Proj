@@ -88,12 +88,14 @@ public class IRCApp
 	{
 		Cursor c = this.globalDB.getServer(id);
 		
+		
 		Server s = new Server(c.getInt(c.getColumnIndex(Database.KEY_ID)),
 				c.getString(c.getColumnIndex(Database.SERVERS_TITLE)),
 				c.getString(c.getColumnIndex(Database.SERVERS_ADDRESS)),
 				c.getInt(c.getColumnIndex(Database.SERVERS_PORT)),
 				c.getString(c.getColumnIndex(Database.SERVERS_PASSWORD)),
 				c.getString(c.getColumnIndex(Database.SERVERS_NICK)));
+		c.close();
 
 		return s;
 	}
@@ -185,5 +187,10 @@ public class IRCApp
 		}
 		
 		return null;
+	}
+
+	public void updateChatlog(int serverid, String username, String command, String channelName, String message) 
+	{
+		System.out.println("TEXT RECEIVED: " + message + " from " + channelName);
 	}
 }

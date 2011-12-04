@@ -19,6 +19,7 @@ public class ChatActivity extends Activity
 	private EditText chatLine;
 	private Button sendButton;
 	
+	private String nick;
 	private int servID;
 	private String channelName = "";
 	/**
@@ -33,6 +34,7 @@ public class ChatActivity extends Activity
 		 
 		 if(extras != null)
 		 {
+			 //String nick = extras.getString("nick");
 			 String name = extras.getString("channelName");
 			 servID = extras.getInt("serverID");
 			 
@@ -56,7 +58,7 @@ public class ChatActivity extends Activity
 				System.out.println("Got text: " + text);
 				
 				chatLine.setText("");
-				chatLog.append(text + "\n");
+				chatLog.append("me: " + text + "\n");
 				
 				try
 				{

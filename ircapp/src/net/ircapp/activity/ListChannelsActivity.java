@@ -25,6 +25,7 @@ public class ListChannelsActivity extends ListActivity implements OnItemLongClic
 	private ListView listview;
 	
 	private int serverID;
+	private String nick;
 	
 	/**
 	 * On Create
@@ -39,6 +40,7 @@ public class ListChannelsActivity extends ListActivity implements OnItemLongClic
 		
 		if(extras != null)
 		{
+			//this.nick = extras.getString("nick");
 			this.serverID = extras.getInt("serverID");
 			String title = extras.getString("serverTitle");
 		
@@ -91,13 +93,15 @@ public class ListChannelsActivity extends ListActivity implements OnItemLongClic
 		String name = tx.getText().toString().trim();
 		
 		// toss in the extra bits we'll need at the chat level
+		//i.putExtra("nick", this.nick);
 		i.putExtra("channelName", name);
-		i.putExtra("serverid", serverID);
+		i.putExtra("serverid", this.serverID);
 		
 		// and join the channel we're clicking on
 		try
 		{
 			IRCApp.getInstance().getConnectedServer(this.serverID).joinChannel(name);
+			//IRCApp.getInstance().getConnectedServer(this.serverID).addChannel(name);
 		}
 		catch (Exception e)
 		{

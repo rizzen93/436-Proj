@@ -137,13 +137,20 @@ public class Server
 		return this.isConnected;
 	}
 	
+	public void sendTextToChannel(String channelName, String text) throws IOException
+	{
+		System.out.println("Sending: " + Constants.send_message + " " + channelName + " :" + text);
+		this.bwriter.write(Constants.send_message + " " + channelName + " :" + text + this.end);
+		this.bwriter.flush();
+	}
+	
 	public void disconnect() throws IOException
 	{
 		if(isConnected)
 		{
 			System.out.println("removing connection to: " + this.socket);
 			
-			this.bwriter.write(Constants.server_quit);
+			this.bwriter.write(Constants.server_quit + " :Disconnecting");
 			this.bwriter.close();
 			this.breader.close();
 			this.socket.close();
@@ -229,11 +236,5 @@ public class Server
 	{
 		return "[ " + this.serverID + " ] --- [ server title - " + this.serverTitle + " ] --- [ server host - " + this.serverHostname + " ] --- [ server port - " 
 				+ this.serverPort +	" ] --- [ server pass - " + this.password + " ] --- [ nickname - " + this.nickname + " ]";
-	}
-
-	public void sendTextToChannel(String channelName, String text) throws IOException
-	{
-		this.bwriter.write(Constants.PRIVMSG + " " + channelName + " :" + text);
-		this.bwriter.flush();
 	}
 }

@@ -11,7 +11,6 @@ public class Constants
 	public static final String server_pong = "PONG ";
 	public static final String server_ping = "PING ";
 	public static final String server_quit = "QUIT ";
-	public static final String PRIVMSG = "PRIVMSG";
 	
 	
 }

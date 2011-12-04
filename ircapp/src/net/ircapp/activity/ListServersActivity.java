@@ -76,6 +76,7 @@ public class ListServersActivity extends ListActivity implements OnItemLongClick
 		
 		String title = tx.getText().toString().trim();
 		
+		//i.putExtra("nick", IRCApp.getInstance().getServerFromID(position).getNickname());
 		i.putExtra("serverTitle", title);
 		i.putExtra("serverID", position);
 		
@@ -92,12 +93,13 @@ public class ListServersActivity extends ListActivity implements OnItemLongClick
 	{
 		// get object from the listadapter
 		final Cursor cursor = (Cursor) serverListAdapter.getItem(position);
-
+		startManagingCursor(cursor);
+		
 		// get what we need from the cursor
 		final int serverID = cursor.getInt(cursor.getColumnIndex(Database.KEY_ID));
 		System.out.println("serverid: " + serverID);
 		//final int serverID = position;
-		final String serverTitle = cursor.getString(cursor.getColumnIndex(Database.SERVERS_TITLE));
+	
 		// list of context options we have
         CharSequence[] submenu = {"Connect", "Disconnect", "Edit", "Delete"};
 
@@ -155,6 +157,7 @@ public class ListServersActivity extends ListActivity implements OnItemLongClick
         				System.out.println("Disconnect: s.id== " + s.getServerID() + " -- " + serverID);
         				if(s.isConnected())
         						s.disconnect();
+        				
                 	}
                 	catch (IOException e)
                 	{
@@ -168,8 +171,10 @@ public class ListServersActivity extends ListActivity implements OnItemLongClick
         			// delete server from list
         			IRCApp.getInstance().removeServerByID(serverID);
         	        serverListAdapter.notifyDataSetChanged();
+
         			break;
         		}
+    	        //cursor.close();
         	}
         });
         
