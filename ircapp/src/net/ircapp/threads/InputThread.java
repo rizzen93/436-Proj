@@ -17,6 +17,8 @@ public class InputThread extends Thread
 		System.out.println("New InputThread for: " + s.getServerTitle());
 		this.server = s;
 		this.breader = s.getReader();
+		
+		this.start();
 	}
 	
 	/**
@@ -55,6 +57,10 @@ public class InputThread extends Thread
 		{
 			this.server.sendPong(Constants.server_pong + line.substring(5));
 		}
+		String[] message = line.split(" ");
+		
+		System.out.println(message.length);
+		
 	}
 	
 }

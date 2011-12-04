@@ -7,6 +7,7 @@ import net.ircapp.IRCApp;
 import net.ircapp.R;
 import net.ircapp.adapters.ServerListAdapter;
 import net.ircapp.db.Database;
+import net.ircapp.model.Channel;
 import net.ircapp.model.Server;
 import android.app.AlertDialog;
 import android.app.ListActivity;
@@ -66,20 +67,6 @@ public class ListServersActivity extends ListActivity implements OnItemLongClick
 		
 		ArrayList<Server> servers = IRCApp.getInstance().getServerList();
 		
-		// probably a better way to do this, but whatever
-		for(Server s : servers)
-		{
-			// match server id to the id of the listview item
-			if(s.getServerID() == id)
-			{
-				System.out.println("comparing: " + s.getServerID() + " == " + id);
-				// stick the server title into the intent as extra data
-				// this should only happen once, i think >>
-				i.putExtra("serverID", s.getServerID());
-				i.putExtra("serverTitle", s.getServerTitle());
-				break;
-			}
-		}
 		
 		// and start the new activity
 		startActivity(i);
@@ -116,8 +103,13 @@ public class ListServersActivity extends ListActivity implements OnItemLongClick
         			System.out.println("chose to connect to server");	
         			try 
         			{
+        				// create status channel
+        				//Channel status = new Channel(newServer.getServerID(), newServer.getServerTitle()+" status", "");
+        				IRCApp.getInstance().getDB().addChannel(newServer.getServerID(), newServer.getServerTitle()+" status", "");
         				// connect to the irc server
 						newServer.connect();
+						
+						
 						newServer.joinChannel("phx");
 					} 
         			catch (IOException e) 

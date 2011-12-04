@@ -36,6 +36,7 @@ public class ListChannelsActivity extends ListActivity implements OnItemLongClic
 		System.out.println("ListChannels onCreate()");
 		
 		Bundle extras = getIntent().getExtras();
+		
 		if(extras != null)
 		{
 			this.serverID = extras.getInt("serverID");

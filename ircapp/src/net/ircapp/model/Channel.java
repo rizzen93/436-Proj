@@ -17,14 +17,25 @@ public class Channel
 	// server info
 	private int serverID;
 	private Server server;
+	private String nickname;
 	
-	public Channel(int ID, String channelName, String password)
+	public Channel(int servID, String channelName, String password)
 	{
-		this.serverID = ID;
+		this.serverID = servID;
 		this.channelName = channelName;
 		this.channelPassword = password;
 		
 		this.chat = new Chat(this);
+	}
+	
+	public String getNick()
+	{
+		return this.nickname;
+	}
+	
+	public void setNick(String nickname)
+	{
+		this.nickname = nickname;
 	}
 	
 	public void setParentServer(Server s)
