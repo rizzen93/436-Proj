@@ -229,4 +229,10 @@ public class Server
 		return "[ " + this.serverID + " ] --- [ server title - " + this.serverTitle + " ] --- [ server host - " + this.serverHostname + " ] --- [ server port - " 
 				+ this.serverPort +	" ] --- [ server pass - " + this.password + " ] --- [ nickname - " + this.nickname + " ]";
 	}
+
+	public void sendTextToChannel(String channelName, String text) throws IOException
+	{
+		this.bwriter.write(Constants.PRIVMSG + " " + channelName + " :" + text);
+		this.bwriter.flush();
+	}
 }

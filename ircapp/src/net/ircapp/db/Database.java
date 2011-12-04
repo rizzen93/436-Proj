@@ -8,6 +8,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
 import android.util.Log;
@@ -52,13 +53,48 @@ public class Database
 
 	public Database open() throws SQLException
 	{
-		DatabaseHelper dbHelper = new DatabaseHelper(this.context);
-		this.db = dbHelper.getWritableDatabase();
+		boolean check;
+		if(check = checkForDB())
+		{
+			System.out.println("Found existing database");
+			this.db = SQLiteDatabase.openDatabase("/data/data/net.ircapp/databases/" + DATABASE_NAME, null, SQLiteDatabase.OPEN_READWRITE);
+			return this;
+		}
+		else
+		{
+			DatabaseHelper dbHelper = new DatabaseHelper(this.context);
+			this.db = dbHelper.getWritableDatabase();
 
-		System.out.println("Database opened for writing");
-		
-		return this;
+			System.out.println("New Database created");
+			
+			return this;
+		}
 	}
+	
+	public boolean checkForDB()
+	{
+		SQLiteDatabase checkDB = null;
+    	 
+    	try
+    	{
+    		System.out.println("Searching for existing databases");
+    		String myPath = "/data/data/net.ircapp/databases/" + DATABASE_NAME;
+    		checkDB = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READONLY);
+ 
+    	}
+    	catch
+    	(SQLiteException e){
+    	}
+ 
+    	if(checkDB != null)
+    	{
+ 
+    		checkDB.close();
+    	}
+ 
+    	return checkDB != null ? true : false;
+	}
+	
 
 	public void close()
 	{
@@ -88,24 +124,6 @@ public class Database
 		System.out.println("Adding server to the DB: " + title);
 		
 		return this.db.insert(SERVERLIST_TABLE, null, values);
-	}
-	
-	/**
-	 * Constructs and returns a server from a given database cursor
-	 * @param c
-	 * @return
-	 */
-	public Server getServerFromCursor(Cursor c)
-	{
-		System.out.println("WOAH NELLY " + c.getInt(c.getColumnIndex(Database.KEY_ID)));
-		Server s = new Server(c.getInt(c.getColumnIndex(Database.KEY_ID)),
-				c.getString(c.getColumnIndex(Database.SERVERS_TITLE)),
-				c.getString(c.getColumnIndex(Database.SERVERS_ADDRESS)),
-				c.getInt(c.getColumnIndex(Database.SERVERS_PORT)),
-				c.getString(c.getColumnIndex(Database.SERVERS_PASSWORD)),
-				c.getString(c.getColumnIndex(Database.SERVERS_NICK)));
-
-		return s;
 	}
 	
 	/**
@@ -149,7 +167,10 @@ public class Database
 	 */
 	public Cursor getServer(int id)
 	{
-		return null;
+		Cursor c = db.query(SERVERLIST_TABLE, new String[] {KEY_ID, SERVERS_TITLE, SERVERS_ADDRESS, SERVERS_PORT, SERVERS_PASSWORD, SERVERS_NICK}, 
+				KEY_ID + "=" + id, null, null, null, null);
+		c.moveToFirst();
+		return c;
 	}
 	
 	/**
@@ -161,8 +182,10 @@ public class Database
 	public Cursor getChannel(int serverID, String channelName)
 	{
 		System.out.println("DB Query: GET " + channelName);
-		return db.query(CHANNELLIST_TABLE, new String[] { CHANNELS_SERVID, CHANNELS_NAME, CHANNELS_PASSWORD}, 
-				CHANNELS_SERVID + "=" + serverID + ", " + CHANNELS_NAME + "=" + channelName, null, null, null, null);
+		Cursor c = db.query(CHANNELLIST_TABLE, new String[] { CHANNELS_SERVID, CHANNELS_NAME, CHANNELS_PASSWORD}, 
+			CHANNELS_NAME + "='" + channelName+"'", null, null, null, null);
+		c.moveToFirst();
+		return c;
 	}
 
 	/**
@@ -172,7 +195,7 @@ public class Database
 	 * @param channelPassword
 	 * @return
 	 */
-	public long addChannel(int id, String channelName, String channelPassword)
+	public void addChannel(int id, String channelName, String channelPassword)
 	{
 		ContentValues values = new ContentValues();
 		values.put(CHANNELS_SERVID, id);
@@ -181,7 +204,7 @@ public class Database
 	
 		System.out.println("Adding new channel to DB: " + channelName);
 		
-		return this.db.insert(CHANNELLIST_TABLE, null, values);
+		this.db.insert(CHANNELLIST_TABLE, null, values);
 
 	}
 

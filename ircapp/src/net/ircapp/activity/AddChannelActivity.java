@@ -7,6 +7,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 
+import net.ircapp.IRCApp;
 import net.ircapp.R;
 import net.ircapp.db.Database;
 import net.ircapp.model.Channel;
@@ -69,13 +70,13 @@ public class AddChannelActivity extends Activity implements OnClickListener
 	private void addChannelToDB(Channel c)
 	{
 		// get and open the db
-		Database db = new Database(this);
-		db.open();
+		Database db = IRCApp.getInstance().getDB();
+		//db.open();
 		
 		// insert the channel, and get it's id
 		db.addChannel(this.serverID, c.getChannelName(), c.getChannelPassword());
 		
-		db.close();
+		//db.close();
 		
 		// give the channel it'd id
 		//IRCApp.getInstance().getServer(c.getServer())

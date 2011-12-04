@@ -60,11 +60,11 @@ public class AddServerActivity extends Activity implements OnClickListener
 	public void addServerToDB(Server s)
 	{
 		// get the database & open it
-		Database db = new Database(this);	
-		db.open();
+		Database db = IRCApp.getInstance().getDB();
+		//db.open();
 		// get the id while putting it into the db
 		db.addServer(s.getServerTitle(), s.getServerHostname(), s.getServerPort(), s.getServerPassword(), s.getNickname());
-		db.close();
+		//db.close();
 		
 		// add to global list
 		IRCApp.getInstance().addServer(s);

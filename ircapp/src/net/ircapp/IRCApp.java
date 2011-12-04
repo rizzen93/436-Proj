@@ -1,6 +1,7 @@
 package net.ircapp;
 
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import net.ircapp.db.Database;
@@ -86,35 +87,24 @@ public class IRCApp
 	 */
 	public Server getServerFromID(int id)
 	{
-		for(Server s : this.servers)
-		{
-			if(s.getServerID() == id)
-			{
-				return s;
-			}
-		}
+		Cursor c = this.globalDB.getServer(id);
 		
-		return null;
+		Server s = new Server(c.getInt(c.getColumnIndex(Database.KEY_ID)),
+				c.getString(c.getColumnIndex(Database.SERVERS_TITLE)),
+				c.getString(c.getColumnIndex(Database.SERVERS_ADDRESS)),
+				c.getInt(c.getColumnIndex(Database.SERVERS_PORT)),
+				c.getString(c.getColumnIndex(Database.SERVERS_PASSWORD)),
+				c.getString(c.getColumnIndex(Database.SERVERS_NICK)));
+
+		return s;
 	}
 	
-	/**
-	 * 
-	 * @param c
-	 * @return
-	 */
-	public Server getServerFromCursor(Cursor c)
+	public void removeServerByID(int id)
 	{
-		for(Server s : this.servers)
-		{
-			if(s.getServerID() == c.getInt(c.getColumnIndex(Database.KEY_ID)))
-			{
-				return s;
-			}
-		}
-		
-		return null;
+		this.globalDB.removeServer(id);
 	}
 	
+
 	public Server getServerFromTitle(String title)
 	{
 		for(Server s : this.servers)
@@ -161,5 +151,14 @@ public class IRCApp
 	public int getNumServers()
 	{
 		return this.servers.size();
+	}
+
+	public void sendText(int servID, String channelName, String text) throws IOException 
+	{
+		Server s = this.getServerFromID(servID);
+		if(s.isConnected())
+		{
+			s.sendTextToChannel(channelName, text);
+		}
 	}
 }

@@ -95,9 +95,11 @@ public class ListServersActivity extends ListActivity implements OnItemLongClick
 		// get object from the listadapter
 		final Cursor cursor = (Cursor) serverListAdapter.getItem(position);
 
-		// make new object
-		final Server newServer = IRCApp.getInstance().getDB().getServerFromCursor(cursor);
-		
+		// get what we need from the cursor
+		final int serverID = cursor.getInt(cursor.getColumnIndex(Database.KEY_ID));
+		System.out.println("serverid: " + serverID);
+		//final int serverID = position;
+		final String serverTitle = cursor.getString(cursor.getColumnIndex(Database.SERVERS_TITLE));
 		// list of context options we have
         CharSequence[] submenu = {"Connect", "Disconnect", "Edit", "Delete"};
 
@@ -116,14 +118,23 @@ public class ListServersActivity extends ListActivity implements OnItemLongClick
         			System.out.println("chose to connect to server");	
         			try 
         			{
-        				// create status channel
-        				//Channel status = new Channel(newServer.getServerID(), newServer.getServerTitle()+" status", "");
-        				IRCApp.getInstance().getDB().addChannel(newServer.getServerID(), newServer.getServerTitle()+" status", "");
+				
         				// connect to the irc server
-						newServer.connect();
+						Server s = IRCApp.getInstance().getServerFromID(serverID);
 						
+        				// create status channel
+						Cursor chan = IRCApp.getInstance().getDB().getChannel(serverID, serverTitle + " status");
+						chan.moveToFirst();
 						
-						newServer.joinChannel("phx");
+						if(chan.isNull(chan.getColumnIndex(Database.CHANNELS_NAME)))
+						{
+							
+							IRCApp.getInstance().getDB().addChannel(serverID, serverTitle + " status", "");
+						}else
+							System.out.println("WE ALRAEDY GOT ONE");
+						
+						s.connect();
+						s.joinChannel("#phx");
 					} 
         			catch (IOException e) 
         			{
@@ -136,14 +147,12 @@ public class ListServersActivity extends ListActivity implements OnItemLongClick
         			// disconnect
         			try
                 	{
-        				Server s = IRCApp.getInstance().getServerFromCursor(cursor);
+        				Server s = IRCApp.getInstance().getServerFromID(serverID);
         				
         				// bad things happen if i remove this shit.
-        				if(IRCApp.getInstance().getNumServers() > 0)
-        				{
-        					if(s.isConnected())
+        				System.out.println("Disconnect: s.id== " + s.getServerID() + " -- " + serverID);
+        				if(s.isConnected())
         						s.disconnect();
-        				}
                 	}
                 	catch (IOException e)
                 	{
@@ -155,7 +164,7 @@ public class ListServersActivity extends ListActivity implements OnItemLongClick
         			break;
         		case 3:
         			// delete server from list
-        			IRCApp.getInstance().removeServer(newServer);
+        			IRCApp.getInstance().removeServerByID(serverID);
         	        serverListAdapter.notifyDataSetChanged();
         			break;
         		}

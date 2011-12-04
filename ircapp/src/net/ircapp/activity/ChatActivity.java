@@ -1,5 +1,7 @@
 package net.ircapp.activity;
 
+import java.io.IOException;
+
 import net.ircapp.IRCApp;
 import net.ircapp.R;
 import net.ircapp.commands.Constants;
@@ -17,6 +19,8 @@ public class ChatActivity extends Activity
 	private EditText chatLine;
 	private Button sendButton;
 	
+	private int servID;
+	private String channelName = "";
 	/**
 	 * On Create
 	 */
@@ -30,9 +34,14 @@ public class ChatActivity extends Activity
 		 if(extras != null)
 		 {
 			 String name = extras.getString("channelName");
+			 servID = extras.getInt("serverID");
+			 
 			 System.out.println("WE GOT EXTRAS HERE");
 			 setTitle("IRCApp -- " + name);
+			 this.channelName = name;
 		 }
+		 
+		 
 		 this.chatLog = (EditText) findViewById(R.id.channelview_chatLog);
 		 this.chatLine = (EditText) findViewById(R.id.channelview_chatLine);
 		 this.sendButton = (Button) findViewById(R.id.channelview_sendButton);
@@ -47,9 +56,16 @@ public class ChatActivity extends Activity
 				System.out.println("Got text: " + text);
 				
 				chatLine.setText("");
-				chatLog.append(text);
+				chatLog.append(text + "\n");
 				
-				sendText(text);
+				try
+				{
+					sendText(text);
+				}
+				catch (IOException e)
+				{
+					e.printStackTrace();
+				}
 			}
 		 });
 	 }
@@ -57,10 +73,11 @@ public class ChatActivity extends Activity
 	 /**
 	  * Sends the specified text to the server
 	  * @param text
+	  * @throws IOException 
 	  */
-	 public void sendText(String text)
+	 public void sendText(String text) throws IOException
 	 {
-		 //IRCApp.getInstance().sendText(servID, Constants.PRIVMSG, channelName, text);
+		 IRCApp.getInstance().sendText(servID, this.channelName, text);
 	 }
 }
 
