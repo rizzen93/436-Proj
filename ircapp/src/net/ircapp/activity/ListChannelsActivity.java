@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.AdapterView.OnItemLongClickListener;
+import android.widget.TextView;
 
 import net.ircapp.IRCApp;
 import net.ircapp.R;
@@ -44,10 +45,7 @@ public class ListChannelsActivity extends ListActivity implements OnItemLongClic
 		
 			System.out.println("Retrieved ID: " + serverID);
 		
-			// create the default channel we get system messages from
-			// and add it to the db
-			Channel system = new Channel(serverID, title, "");
-			IRCApp.getInstance().getDB().addChannel(serverID, system.getChannelName(), system.getChannelPassword());
+			setTitle("IRCApp -- " + title);
 		}
 		
 		// get the cursor we're using from the global instance
@@ -87,7 +85,11 @@ public class ListChannelsActivity extends ListActivity implements OnItemLongClic
 	{
 		Intent i = new Intent(this, ChatActivity.class);
 		
+		TextView tx = (TextView) v.findViewById(R.id.channelitem_channelName);
+		String name = tx.getText().toString().trim();
 		
+		i.putExtra("channelName", name);
+		i.putExtra("serverid", serverID);
 		/*
 		// and relevent channel info
 		i.putExtra("channelName", channel.getChannelName());

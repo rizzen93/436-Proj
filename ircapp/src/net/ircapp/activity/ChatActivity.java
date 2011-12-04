@@ -28,8 +28,11 @@ public class ChatActivity extends Activity
 		 Bundle extras = this.getIntent().getExtras();
 		 
 		 if(extras != null)
+		 {
+			 String name = extras.getString("channelName");
 			 System.out.println("WE GOT EXTRAS HERE");
-		 
+			 setTitle("IRCApp -- " + name);
+		 }
 		 this.chatLog = (EditText) findViewById(R.id.channelview_chatLog);
 		 this.chatLine = (EditText) findViewById(R.id.channelview_chatLine);
 		 this.sendButton = (Button) findViewById(R.id.channelview_sendButton);

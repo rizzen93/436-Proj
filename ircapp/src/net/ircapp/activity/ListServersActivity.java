@@ -23,6 +23,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ListView;
+import android.widget.TextView;
 
 public class ListServersActivity extends ListActivity implements OnItemLongClickListener
 {
@@ -40,10 +41,18 @@ public class ListServersActivity extends ListActivity implements OnItemLongClick
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.serverlist);
 
+		setTitle("IRCApp -- Server List");
+		
 		System.out.println("ListServersActivity onCreate");
 		
-		System.out.println("ListServersActivity initDB");
-		IRCApp.getInstance().initDB(this);
+		if(!IRCApp.getInstance().isDBInitialized())
+		{
+			System.out.println("ListServersActivity initDB");
+			IRCApp.getInstance().initDB(this);
+		}
+		else
+			IRCApp.getInstance().getDB().open();
+
 		
 		listCursor = IRCApp.getInstance().getDB().getServerList();
 		startManagingCursor(listCursor);
@@ -61,12 +70,16 @@ public class ListServersActivity extends ListActivity implements OnItemLongClick
 	 */
 	public void onListItemClick(ListView l, View v, int position, long id)
 	{
-		System.out.println("OnListItemClick");
+		System.out.println("clicked on item: " + position);
 		// create the new intent
 		Intent i = new Intent(this, ListChannelsActivity.class);
 		
-		ArrayList<Server> servers = IRCApp.getInstance().getServerList();
+		TextView tx = (TextView) v.findViewById(R.id.serveritem_serverTitle);
 		
+		String title = tx.getText().toString().trim();
+		
+		i.putExtra("serverTitle", title);
+		i.putExtra("serverID", position);
 		
 		// and start the new activity
 		startActivity(i);
@@ -124,10 +137,13 @@ public class ListServersActivity extends ListActivity implements OnItemLongClick
         			try
                 	{
         				Server s = IRCApp.getInstance().getServerFromCursor(cursor);
-
-        				if(s.isConnected())
-        					s.disconnect();
-        						
+        				
+        				// bad things happen if i remove this shit.
+        				if(IRCApp.getInstance().getNumServers() > 0)
+        				{
+        					if(s.isConnected())
+        						s.disconnect();
+        				}
                 	}
                 	catch (IOException e)
                 	{
@@ -154,7 +170,7 @@ public class ListServersActivity extends ListActivity implements OnItemLongClick
 	}
 
 	/**
-	 * options menu button clicked
+	 * Options menu button clicked
 	 */
     @Override
     public boolean onCreateOptionsMenu(Menu menu)

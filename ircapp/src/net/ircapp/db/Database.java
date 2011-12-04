@@ -97,6 +97,7 @@ public class Database
 	 */
 	public Server getServerFromCursor(Cursor c)
 	{
+		System.out.println("WOAH NELLY " + c.getInt(c.getColumnIndex(Database.KEY_ID)));
 		Server s = new Server(c.getInt(c.getColumnIndex(Database.KEY_ID)),
 				c.getString(c.getColumnIndex(Database.SERVERS_TITLE)),
 				c.getString(c.getColumnIndex(Database.SERVERS_ADDRESS)),

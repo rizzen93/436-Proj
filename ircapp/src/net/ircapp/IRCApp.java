@@ -16,6 +16,7 @@ public class IRCApp
 	private ArrayList<Server> servers;
 	private Cursor serversCursor;
 	private Database globalDB;
+	private boolean dbInitialized = false;
 	
 	/**
 	 * Constructor
@@ -48,6 +49,17 @@ public class IRCApp
 	{
 		this.globalDB = new Database(context);
 		this.globalDB.open();
+		this.dbInitialized = true;
+	}
+	
+	public boolean isDBInitialized()
+	{
+		return this.dbInitialized;
+	}
+	
+	public void setDBInit(boolean b)
+	{
+		this.dbInitialized = b;
 	}
 	
 	/**
@@ -100,6 +112,16 @@ public class IRCApp
 			}
 		}
 		
+		return null;
+	}
+	
+	public Server getServerFromTitle(String title)
+	{
+		for(Server s : this.servers)
+		{
+			if(s.getServerTitle().equals(title))
+				return s;
+		}
 		return null;
 	}
 	
