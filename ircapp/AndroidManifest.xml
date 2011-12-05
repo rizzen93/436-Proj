@@ -6,7 +6,7 @@
     <uses-sdk android:minSdkVersion="8" />
     <application 
     	android:icon="@drawable/icon"
-    	android:label="ircapp">
+    	android:label="ircapp" android:debuggable="true">
 		<activity 
 			android:name=".activity.ListServersActivity" 
 			android:label="@string/listservers"
