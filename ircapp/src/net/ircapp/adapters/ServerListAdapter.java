@@ -25,7 +25,7 @@ public class ServerListAdapter extends ResourceCursorAdapter
 		// bind us to the proper textviews
 		TextView txTitle = (TextView) view.findViewById(R.id.serveritem_serverTitle);
 		TextView txHost = (TextView) view.findViewById(R.id.serveritem_serverHostname);
-		TextView txStatus = (TextView) view.findViewWithTag(R.id.serveritem_serverStatus);
+		//TextView txStatus = (TextView) view.findViewWithTag(R.id.serveritem_serverStatus);
 
 		// get the proper text from the db
 		txTitle.setText(cursor.getString(cursor.getColumnIndex(Database.SERVERS_TITLE)));

@@ -62,7 +62,6 @@ public class Server
 		this.nickname = nick;
 		this.isConnected = false;
 		
-		
 		System.out.println("New Server: " + this.toString());
 	}
 	

@@ -29,7 +29,7 @@ public class ChannelListAdapter extends ResourceCursorAdapter
 	{
 		// bind us to the proper ui stuffs
 		TextView channelName = (TextView) view.findViewById(R.id.channelitem_channelName);
-		TextView channelStatus = (TextView) view.findViewById(R.id.channelitem_joinStatus);
+		//TextView channelStatus = (TextView) view.findViewById(R.id.channelitem_joinStatus);
 		
 		channelName.setText(cursor.getString(cursor.getColumnIndex(Database.CHANNELS_NAME)));
 		

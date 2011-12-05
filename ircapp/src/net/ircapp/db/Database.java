@@ -1,8 +1,6 @@
 package net.ircapp.db;
 
-import net.ircapp.IRCApp;
 import net.ircapp.model.Channel;
-import net.ircapp.model.Server;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -12,7 +10,6 @@ import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteStatement;
 import android.provider.BaseColumns;
-import android.util.Log;
 
 public class Database  
 {

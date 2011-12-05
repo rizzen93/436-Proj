@@ -1,7 +1,5 @@
 package net.ircapp.model;
 
-import java.util.ArrayList;
-
 public class Channel 
 {
 	// type of channel
