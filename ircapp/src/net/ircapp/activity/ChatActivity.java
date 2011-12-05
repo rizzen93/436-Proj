@@ -4,10 +4,9 @@ import java.io.IOException;
 
 import net.ircapp.IRCApp;
 import net.ircapp.R;
-import net.ircapp.commands.Constants;
+import net.ircapp.model.Server;
 import android.app.Activity;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.Message;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -21,7 +20,7 @@ public class ChatActivity extends Activity
 	private EditText chatLine;
 	private Button sendButton;
 	
-	private String nick;
+	//private String nick;
 	private int servID;
 	private String channelName = "";
 	
@@ -33,6 +32,10 @@ public class ChatActivity extends Activity
 		 super.onCreate(savedInstanceState);
 		 setContentView(R.layout.channelview);
 		 
+		 this.chatLog = (EditText) findViewById(R.id.channelview_chatLog);
+		 this.chatLine = (EditText) findViewById(R.id.channelview_chatLine);
+		 this.sendButton = (Button) findViewById(R.id.channelview_sendButton);
+		 
 		 Bundle extras = this.getIntent().getExtras();
 		 
 		 if(extras != null)
@@ -40,27 +43,23 @@ public class ChatActivity extends Activity
 			 //String nick = extras.getString("nick");
 			 String name = extras.getString("channelName");
 			 servID = extras.getInt("serverID");
+		
+			 Server s = IRCApp.getInstance().getConnectedServer(servID);
+			 
+			 if(s == null)
+				 finish();
 			 
 			 setTitle("IRCApp -- " + name);
 			 this.channelName = name;
 			 
-			 //IRCApp.getInstance().setCurrentChatActivity(this);
-			//new MessageHandler(this, servID, name);
-		 }
-		 
-		 
-		 this.chatLog = (EditText) findViewById(R.id.channelview_chatLog);
-		 this.chatLine = (EditText) findViewById(R.id.channelview_chatLine);
-		 this.sendButton = (Button) findViewById(R.id.channelview_sendButton);
-		 
-		 final Handler mHandler = new Handler() 
-		 {
-			 @Override
-			 public void handleMessage(Message msg)
+			 for(String m : s.getMessages())
 			 {
-				 updateLog((String) msg.obj);
+				 this.chatLog.append(m + "\n");
 			 }
-		 };
+			 s.clearMessageQueue();
+			 
+		 }		 
+		 
 		 
 		 // set up the buttonlistener
 		 this.sendButton.setOnClickListener(new OnClickListener() {
@@ -69,7 +68,7 @@ public class ChatActivity extends Activity
 			public void onClick(View v) 
 			{
 				String text = chatLine.getText().toString().trim();
-				System.out.println("Got text: " + text);
+				//System.out.println("Got text: " + text);
 				
 				chatLine.setText("");
 				chatLog.append("me: " + text + "\n");
@@ -96,12 +95,11 @@ public class ChatActivity extends Activity
 		 IRCApp.getInstance().sendText(servID, this.channelName, text);
 	 }
 	 
-	 public void updateLog(String text)
+	 public void updateLog(Message msg)
 	 {
-		 EditText chatLog = (EditText) findViewById(R.id.channelview_chatLog);
-		 chatLog.setText(text);
+		 //EditText chatLog = (EditText) findViewById(R.id.channelview_chatLog);
+		 chatLog.setText((String) msg.obj);
 	 }
 	 
-
 }
 

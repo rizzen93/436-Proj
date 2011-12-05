@@ -9,7 +9,6 @@ import android.widget.EditText;
 
 import net.ircapp.IRCApp;
 import net.ircapp.R;
-import net.ircapp.db.Database;
 import net.ircapp.model.Channel;
 
 public class AddChannelActivity extends Activity implements OnClickListener

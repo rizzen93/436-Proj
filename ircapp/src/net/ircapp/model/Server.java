@@ -10,7 +10,6 @@ import java.util.ArrayList;
 
 import net.ircapp.commands.Constants;
 import net.ircapp.threads.InputThread;
-import net.ircapp.threads.OutputThread;
 
 public class Server 
 {
@@ -24,21 +23,19 @@ public class Server
 	private boolean autoConnect;
 	private String nickname;
 	
-	private int status;
 	private boolean isConnected;
 	
 	// channel stuffs?
 	private ArrayList<String> channels;
-	
-	private String currentChannel;
-	private InputThread inputThread;
-	//private OutputThread outputThread;
 	
 	// connection stuffs
 	private Socket socket;
 	private BufferedReader breader;
 	private BufferedWriter bwriter;
 	private String end = "\n\r";
+	
+	private InputThread inputThread;
+	private ArrayList<String> messages;
 	
 	// autojoin + connect commands?
 	
@@ -54,6 +51,7 @@ public class Server
 	public Server(int id, String title, String hostname, int port, String password, String nick)
 	{
 		this.channels = new ArrayList<String>();
+		this.messages = new ArrayList<String>();
 		
 		this.serverID = id;
 		this.serverTitle = title;
@@ -62,7 +60,6 @@ public class Server
 		this.password = password;
 		autoConnect = false;
 		this.nickname = nick;
-		status = 0;
 		this.isConnected = false;
 		
 		
@@ -97,7 +94,7 @@ public class Server
 		String line = null;
 		while((line = breader.readLine()) != null)
 		{
-			System.out.println(line);
+			//System.out.println(line);
 			if(line.indexOf("004") >= 0)
 			{
 				// means we're 'logged in' and connected to the server
@@ -126,10 +123,26 @@ public class Server
 			// return false
 		}
 		
-		new InputThread(this);
+		this.inputThread = new InputThread(this);
 		
 		this.isConnected = true;
+		
 		return true;
+	}
+	
+	public void addMessage(String msg)
+	{
+		this.messages.add(msg);
+	}
+	
+	public void removeMessage(String msg)
+	{
+		this.messages.remove(msg);
+	}
+	
+	public ArrayList<String> getMessages()
+	{
+		return this.messages;
 	}
 	
 	public boolean isConnected()
@@ -139,28 +152,29 @@ public class Server
 	
 	public void sendTextToChannel(String channelName, String text) throws IOException
 	{
-		System.out.println("Sending: " + Constants.send_message + " " + channelName + " :" + text);
+		//System.out.println("Sending: " + Constants.send_message + " " + channelName + " :" + text);
 		this.bwriter.write(Constants.send_message + " " + channelName + " :" + text + this.end);
 		this.bwriter.flush();
 	}
 	
 	public void disconnect() throws IOException
 	{
-		if(isConnected)
-		{
-			System.out.println("removing connection to: " + this.socket);
+		//System.out.println("removing connection to: " + this.socket);
 			
-			this.bwriter.write(Constants.server_quit + " :Disconnecting" + this.end);
-			this.bwriter.close();
-			this.breader.close();
-			this.socket.close();
-			this.isConnected = false;
-		}
+		this.bwriter.write(Constants.server_quit + " :Disconnecting " + this.end);
+		this.socket.shutdownInput();
+		this.socket.shutdownOutput();
+			
+		this.bwriter.close();
+		this.breader.close();
+		//this.socket.close();
+		
+		this.isConnected = false;
 	}
 	
 	public void joinChannel(String channel) throws IOException
 	{
-		System.out.println("SERVER: " + this.serverID + " joining "+ channel);
+		//System.out.println("SERVER: " + this.serverID + " joining "+ channel);
 		this.bwriter.write(Constants.join_channel + channel + this.end);
 		this.bwriter.flush();
 	}
@@ -168,7 +182,7 @@ public class Server
 	// part channel
 	public void leaveChannel(String channel) throws IOException
 	{
-		System.out.println("leaving channel: " + channel);
+		//System.out.println("leaving channel: " + channel);
 		this.bwriter.write(Constants.part_channel + channel + this.end);
 		this.bwriter.flush();
 	}
@@ -253,5 +267,10 @@ public class Server
 	{
 		return "[ " + this.serverID + " ] --- [ server title - " + this.serverTitle + " ] --- [ server host - " + this.serverHostname + " ] --- [ server port - " 
 				+ this.serverPort +	" ] --- [ server pass - " + this.password + " ] --- [ nickname - " + this.nickname + " ]";
+	}
+
+	public void clearMessageQueue() 
+	{
+		this.messages.clear();
 	}
 }

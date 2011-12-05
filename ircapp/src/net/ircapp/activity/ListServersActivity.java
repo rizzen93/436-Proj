@@ -7,7 +7,6 @@ import net.ircapp.IRCApp;
 import net.ircapp.R;
 import net.ircapp.adapters.ServerListAdapter;
 import net.ircapp.db.Database;
-import net.ircapp.model.Channel;
 import net.ircapp.model.Server;
 import android.app.AlertDialog;
 import android.app.ListActivity;
@@ -31,7 +30,7 @@ public class ListServersActivity extends ListActivity implements OnItemLongClick
 	private ServerListAdapter serverListAdapter;
 	private ListView listview;
 	Cursor listCursor;
-
+	
 	/**
 	 * called when the activity is first created
 	 */
@@ -59,8 +58,6 @@ public class ListServersActivity extends ListActivity implements OnItemLongClick
 
 		this.listview = getListView();
 		this.listview.setOnItemLongClickListener(this);
-		
-		System.out.println("# SERVERS: " + IRCApp.getInstance().getDB().getNumRows(Database.SERVERLIST_TABLE));
 	}
 	
 	/**
@@ -68,7 +65,7 @@ public class ListServersActivity extends ListActivity implements OnItemLongClick
 	 */
 	public void onListItemClick(ListView l, View v, int position, long id)
 	{
-		System.out.println("clicked on item: " + position);
+		//System.out.println("clicked on item: " + position);
 		// create the new intent
 		Intent i = new Intent(this, ListChannelsActivity.class);
 		
@@ -76,7 +73,6 @@ public class ListServersActivity extends ListActivity implements OnItemLongClick
 		
 		String title = tx.getText().toString().trim();
 		
-		//i.putExtra("nick", IRCApp.getInstance().getServerFromID(position).getNickname());
 		i.putExtra("serverTitle", title);
 		i.putExtra("serverID", position);
 		
@@ -97,7 +93,7 @@ public class ListServersActivity extends ListActivity implements OnItemLongClick
 		
 		// get what we need from the cursor
 		final int serverID = cursor.getInt(cursor.getColumnIndex(Database.KEY_ID));
-		System.out.println("serverid: " + serverID);
+		//System.out.println("serverid: " + serverID);
 		//final int serverID = position;
 	
 		// list of context options we have
@@ -111,58 +107,47 @@ public class ListServersActivity extends ListActivity implements OnItemLongClick
         	@Override
         	public void onClick(DialogInterface dialog, int item)
         	{
-        		switch(item)
+        		switch(item)	
         		{
         		case 0:
         			// connect to server
-        			System.out.println("chose to connect to server");	
+        			//System.out.println("chose to connect to server");	
         			try 
         			{
-				
         				// construct the server from database
 						Server s = IRCApp.getInstance().getServerFromID(serverID);
-						
-        				// create status channel
-						/*Cursor chan = IRCApp.getInstance().getDB().getChannel(serverID, serverTitle + " status");
-						
-				
-						if(!chan.moveToFirst())
-						{
-							IRCApp.getInstance().getDB().addChannel(serverID, serverTitle + " status", "");
-						}else
-							System.out.println("WE ALRAEDY GOT ONE");
-						*/
-						
+					
 						// connect to it
 						s.connect();
 						
 						// add it to the list of connected servers
 						IRCApp.getInstance().addConnectedServer(s);
-						//s.joinChannel("#phx");
 					} 
         			catch (IOException e) 
         			{
-
 						e.printStackTrace();
 					}
         			
         			break;
         		case 1:
         			// disconnect
-        			try
+        			/*try
                 	{
         				Server s = IRCApp.getInstance().getServerFromID(serverID);
+        				Server s = IRCApp.getInstance().getConnectedServer(serverID);
         				
-        				// bad things happen if i remove this shit.
         				System.out.println("Disconnect: s.id== " + s.getServerID() + " -- " + serverID);
+        				
         				if(s.isConnected())
-        						s.disconnect();
+        					s.disconnect();
+        				
+        				IRCApp.getInstance().removeConnectedServer(s);
         				
                 	}
                 	catch (IOException e)
                 	{
                 		e.printStackTrace();
-                	}
+                	}*/
         			break;
         		case 2:
         			// edit server details
@@ -225,7 +210,7 @@ public class ListServersActivity extends ListActivity implements OnItemLongClick
                 {
                 	try
                 	{
-                		System.out.println("trying to disconnect from: " + s.getServerTitle());
+                		//System.out.println("trying to disconnect from: " + s.getServerTitle());
                 		// and disconnect
                 		s.disconnect();
                 	}

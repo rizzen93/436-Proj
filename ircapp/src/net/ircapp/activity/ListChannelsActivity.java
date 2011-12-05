@@ -16,8 +16,6 @@ import android.widget.TextView;
 import net.ircapp.IRCApp;
 import net.ircapp.R;
 import net.ircapp.adapters.ChannelListAdapter;
-import net.ircapp.db.Database;
-import net.ircapp.model.Channel;
 
 public class ListChannelsActivity extends ListActivity implements OnItemLongClickListener
 {
@@ -25,7 +23,7 @@ public class ListChannelsActivity extends ListActivity implements OnItemLongClic
 	private ListView listview;
 	
 	private int serverID;
-	private String nick;
+	//private String nick;
 	
 	/**
 	 * On Create
@@ -35,7 +33,6 @@ public class ListChannelsActivity extends ListActivity implements OnItemLongClic
 		// default stuff, set the layout
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.channellist);
-		
 		Bundle extras = getIntent().getExtras();
 		
 		if(extras != null)
@@ -43,8 +40,9 @@ public class ListChannelsActivity extends ListActivity implements OnItemLongClic
 			//this.nick = extras.getString("nick");
 			this.serverID = extras.getInt("serverID");
 			String title = extras.getString("serverTitle");
+			
 		
-			System.out.println("Retrieved ID: " + serverID);
+			//System.out.println("Retrieved ID: " + serverID);
 		
 			setTitle("IRCApp -- " + title);
 		}
@@ -61,7 +59,7 @@ public class ListChannelsActivity extends ListActivity implements OnItemLongClic
 		this.listview = getListView();
 		this.listview.setOnItemLongClickListener(this);
 		
-		System.out.println("# CHANNELS: " + IRCApp.getInstance().getDB().getNumRows(Database.CHANNELLIST_TABLE));
+		//System.out.println("# CHANNELS: " + IRCApp.getInstance().getDB().getNumRows(Database.CHANNELLIST_TABLE));
 	}
 
 	/**
@@ -71,7 +69,6 @@ public class ListChannelsActivity extends ListActivity implements OnItemLongClic
 	@Override
 	public boolean onItemLongClick(AdapterView<?> l, View v, int position, long id) 
 	{
-		// TODO Auto-generated method stub
 		return false;
 	}
 
@@ -93,7 +90,6 @@ public class ListChannelsActivity extends ListActivity implements OnItemLongClic
 		String name = tx.getText().toString().trim();
 		
 		// toss in the extra bits we'll need at the chat level
-		//i.putExtra("nick", this.nick);
 		i.putExtra("channelName", name);
 		i.putExtra("serverid", this.serverID);
 		

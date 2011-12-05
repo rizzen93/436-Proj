@@ -4,7 +4,6 @@ package net.ircapp;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import net.ircapp.activity.ChatActivity;
 import net.ircapp.db.Database;
 import net.ircapp.model.Server;
 import android.content.Context;
@@ -18,8 +17,6 @@ public class IRCApp
 	private ArrayList<Server> connectedServers;
 	private Database globalDB;
 	private boolean dbInitialized = false;
-
-	private ChatActivity chat;
 	
 	/**
 	 * Constructor
@@ -126,7 +123,7 @@ public class IRCApp
 	{
 		System.out.println("Removing: " + s);
 		this.connectedServers.remove(s);
-		this.globalDB.removeServer(s.getServerID());
+		//this.globalDB.removeServer(s.getServerID());
 	}
 	
 	/**
@@ -190,22 +187,5 @@ public class IRCApp
 		}
 		
 		return null;
-	}
-
-	public void updateChatlog(int serverid, String username, String command, String channelName, String message) 
-	{
-		System.out.println("TEXT RECEIVED: " + message + " from " + channelName);
-		int ex = username.indexOf("!");
-		
-	}
-	
-	public ChatActivity getCurrentChatActivity()
-	{
-		return this.chat;
-	}
-	
-	public void setCurrentChatActivity(ChatActivity c)
-	{
-		this.chat = c;
 	}
 }
