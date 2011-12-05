@@ -28,7 +28,7 @@ public class Server
 	private boolean isConnected;
 	
 	// channel stuffs?
-	private ArrayList<Channel> channels;
+	private ArrayList<String> channels;
 	
 	private String currentChannel;
 	private InputThread inputThread;
@@ -53,7 +53,7 @@ public class Server
 	 */
 	public Server(int id, String title, String hostname, int port, String password, String nick)
 	{
-		this.channels = new ArrayList<Channel>();
+		this.channels = new ArrayList<String>();
 		
 		this.serverID = id;
 		this.serverTitle = title;
@@ -161,14 +161,31 @@ public class Server
 	public void joinChannel(String channel) throws IOException
 	{
 		System.out.println("SERVER: " + this.serverID + " joining "+ channel);
-		this.bwriter.write("JOIN " + channel + this.end);
+		this.bwriter.write(Constants.join_channel + channel + this.end);
 		this.bwriter.flush();
 	}
 	
 	// part channel
-	public void leaveChannel() throws IOException
+	public void leaveChannel(String channel) throws IOException
 	{
-		
+		System.out.println("leaving channel: " + channel);
+		this.bwriter.write(Constants.part_channel + channel + this.end);
+		this.bwriter.flush();
+	}
+	
+	public void addChannel(String channelName)
+	{
+		this.channels.add(channelName);
+	}
+	
+	public void removeChannel(String channelName)
+	{
+		this.channels.remove(channelName);
+	}
+	
+	public ArrayList<String> getChannels()
+	{
+		return this.channels;
 	}
 	
 	public void sendPong(String pong) throws IOException

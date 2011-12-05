@@ -12,7 +12,6 @@ public class Channel
 	private String channelPassword;
 	
 	// for handling chat type stuffs
-	private Chat chat;
 	
 	// server info
 	private int serverID;
@@ -26,8 +25,6 @@ public class Channel
 		this.serverID = servID;
 		this.channelName = channelName;
 		this.channelPassword = password;
-		
-		this.chat = new Chat(this);
 	}
 	
 	public void setInChannel(boolean b)

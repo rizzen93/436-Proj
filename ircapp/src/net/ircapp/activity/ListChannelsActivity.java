@@ -101,7 +101,7 @@ public class ListChannelsActivity extends ListActivity implements OnItemLongClic
 		try
 		{
 			IRCApp.getInstance().getConnectedServer(this.serverID).joinChannel(name);
-			//IRCApp.getInstance().getConnectedServer(this.serverID).addChannel(name);
+			IRCApp.getInstance().getConnectedServer(this.serverID).addChannel(name);
 		}
 		catch (Exception e)
 		{
