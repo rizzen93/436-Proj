@@ -6,11 +6,11 @@
   android:layout_height="match_parent" android:weightSum="1">
     <LinearLayout android:id="@+id/linearLayout1" android:layout_width="match_parent" android:orientation="vertical" android:layout_height="wrap_content" android:layout_weight="0.46">
         <TextView android:layout_height="wrap_content" android:id="@+id/serverTitle_addserver" android:layout_width="wrap_content" android:text="@string/server_title"></TextView>
-        <EditText android:layout_height="wrap_content" android:layout_width="match_parent" android:id="@+id/addserver_serverTitle" android:text="gamesurge">
+        <EditText android:layout_height="wrap_content" android:layout_width="match_parent" android:id="@+id/addserver_serverTitle" android:text="freenode">
             <requestFocus></requestFocus>
         </EditText>
         <TextView android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/serverAddress_addserver" android:text="@string/server_hostname"></TextView>
-        <EditText android:layout_height="wrap_content" android:layout_width="match_parent" android:id="@+id/addserver_serverHostname" android:text="irc.gamesurge.net">
+        <EditText android:layout_height="wrap_content" android:layout_width="match_parent" android:id="@+id/addserver_serverHostname" android:text="irc.freenode.net">
         </EditText>
         <TextView android:layout_height="wrap_content" android:layout_width="wrap_content" android:text="Port" android:id="@+id/serverPort_addserver"></TextView>
         <EditText android:layout_height="wrap_content" android:layout_width="match_parent" android:text="6667" android:id="@+id/addserver_serverPort"></EditText>
@@ -18,7 +18,7 @@
         <EditText android:layout_height="wrap_content" android:layout_width="match_parent" android:id="@+id/addserver_serverPassword">
         </EditText>
         <TextView android:layout_height="wrap_content" android:layout_width="wrap_content" android:text="@string/nickname" android:id="@+id/serverNickname_addserver"></TextView>
-        <EditText android:layout_height="wrap_content" android:layout_width="match_parent" android:id="@+id/addserver_serverNickname" android:text="androidclient"></EditText>
+        <EditText android:layout_height="wrap_content" android:layout_width="match_parent" android:id="@+id/addserver_serverNickname" android:text="testrizzendroid"></EditText>
     </LinearLayout>
     <Button android:text="@string/addToServerList" android:layout_width="match_parent" android:layout_height="wrap_content" android:id="@+id/addserver_addButton"></Button>
     

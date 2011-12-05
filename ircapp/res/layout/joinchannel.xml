@@ -5,7 +5,7 @@
   android:layout_width="match_parent"
   android:layout_height="match_parent" android:weightSum="1">
     <RelativeLayout android:id="@+id/relativeLayout1" android:layout_height="295dp" android:layout_weight="0.53" android:layout_width="match_parent">
-        <EditText android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_alignBaseline="@+id/channelName" android:layout_alignBottom="@+id/channelName" android:layout_alignParentRight="true" android:layout_marginRight="16dp" android:layout_alignLeft="@+id/joinchannel_joinButton" android:id="@+id/joinchannel_channelName">
+        <EditText android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_alignBaseline="@+id/channelName" android:layout_alignBottom="@+id/channelName" android:layout_alignParentRight="true" android:layout_marginRight="16dp" android:layout_alignLeft="@+id/joinchannel_joinButton" android:id="@+id/joinchannel_channelName" android:text="@string/hash">
             <requestFocus></requestFocus>
         </EditText>
         <TextView android:text="Channel Name" android:id="@+id/channelName" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_alignParentTop="true" android:layout_toLeftOf="@+id/nameText" android:layout_marginRight="17dp" android:layout_marginTop="26dp"></TextView>
